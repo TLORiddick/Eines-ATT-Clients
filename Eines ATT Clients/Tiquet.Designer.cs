@@ -24,8 +24,8 @@
         public void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DPTBox = new System.Windows.Forms.ComboBox();
             this.DPTLbl = new System.Windows.Forms.Label();
             this.TITLETiquet = new System.Windows.Forms.Label();
@@ -39,6 +39,8 @@
             this.errorlbl = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.StartTimeTK = new System.Windows.Forms.Timer(this.components);
+            this.CLIENT_CODE = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TICKET_TABLE)).BeginInit();
             this.SuspendLayout();
             // 
@@ -116,36 +118,36 @@
             this.TICKET_TABLE.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TICKET_TABLE.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TICKET_TABLE.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.TICKET_TABLE.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.TICKET_TABLE.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.TICKET_TABLE.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.TICKET_TABLE.DefaultCellStyle = dataGridViewCellStyle2;
             this.TICKET_TABLE.Location = new System.Drawing.Point(15, 141);
             this.TICKET_TABLE.MultiSelect = false;
             this.TICKET_TABLE.Name = "TICKET_TABLE";
             this.TICKET_TABLE.RowHeadersVisible = false;
             this.TICKET_TABLE.Size = new System.Drawing.Size(447, 455);
             this.TICKET_TABLE.TabIndex = 4;
-            this.TICKET_TABLE.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TICKET_TABLE_CellContentClick);
+            this.TICKET_TABLE.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TICKET_TABLE_CellContentClick);
             // 
             // PURCHASE_Date
             // 
             this.PURCHASE_Date.Font = new System.Drawing.Font("Century Gothic", 13F);
             this.PURCHASE_Date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.PURCHASE_Date.Location = new System.Drawing.Point(527, 86);
+            this.PURCHASE_Date.Location = new System.Drawing.Point(783, 86);
             this.PURCHASE_Date.Name = "PURCHASE_Date";
             this.PURCHASE_Date.Size = new System.Drawing.Size(127, 29);
             this.PURCHASE_Date.TabIndex = 6;
@@ -154,7 +156,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(523, 65);
+            this.label1.Location = new System.Drawing.Point(779, 65);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(114, 19);
             this.label1.TabIndex = 1;
@@ -168,7 +170,7 @@
             this.GOBtn.FlatAppearance.BorderSize = 0;
             this.GOBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.GOBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GOBtn.Location = new System.Drawing.Point(677, 73);
+            this.GOBtn.Location = new System.Drawing.Point(933, 73);
             this.GOBtn.Name = "GOBtn";
             this.GOBtn.Size = new System.Drawing.Size(56, 54);
             this.GOBtn.TabIndex = 7;
@@ -205,12 +207,31 @@
             // 
             this.StartTimeTK.Tick += new System.EventHandler(this.StartTimeTK_Tick);
             // 
+            // CLIENT_CODE
+            // 
+            this.CLIENT_CODE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CLIENT_CODE.Location = new System.Drawing.Point(529, 87);
+            this.CLIENT_CODE.Name = "CLIENT_CODE";
+            this.CLIENT_CODE.Size = new System.Drawing.Size(220, 27);
+            this.CLIENT_CODE.TabIndex = 10;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(525, 65);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(168, 19);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "CODI CLIENT (opcional)";
+            // 
             // Tiquet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.Controls.Add(this.CLIENT_CODE);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.errorlbl);
             this.Controls.Add(this.GOBtn);
@@ -219,6 +240,7 @@
             this.Controls.Add(this.TICKETS_LIST);
             this.Controls.Add(this.TITLETiquet);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.TPVLbl);
             this.Controls.Add(this.DPTLbl);
             this.Controls.Add(this.TPVBox);
@@ -252,5 +274,7 @@
         public System.Windows.Forms.Button button1;
         private System.Windows.Forms.Timer StartTimeTK;
         private System.ComponentModel.IContainer components;
+        private System.Windows.Forms.TextBox CLIENT_CODE;
+        public System.Windows.Forms.Label label2;
     }
 }

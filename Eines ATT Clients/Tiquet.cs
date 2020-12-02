@@ -21,20 +21,47 @@ namespace Eines_ATT_Clients
         {
             Hide();
             InitializeComponent();
-            TICKET_TABLE.ForeColor = System.Drawing.Color.Black;
+            string Name = Control_Screen.GETUSER;
             MySqlConnection connection = new MySqlConnection(Connection());
             StringBuilder Command = new StringBuilder();
-            Command.Append("SELECT DSC FROM `departaments-cca`.cca group by DSC order by DPT");
+            Command.Append("SELECT `1`,`2`,`3`,`4`,`5`,`6`,`7`,`8`,`9`,`11`,`12`,`13`,`14`,`15`,`16`,`17`,`18` FROM `departaments-cca`.allowed where Empleado = '" + Name + "'");
             MySqlCommand CMD = new MySqlCommand(Command.ToString(), connection);
             connection.Close();
             connection.Open();
-            MySqlDataReader DPT = CMD.ExecuteReader();
-            while (DPT.Read())
+            MySqlDataReader USER = CMD.ExecuteReader();
+            string[] lines = new string[USER.VisibleFieldCount];
+            while (USER.Read())
             {
-                DPTBox.Items.Add(DPT[0].ToString().Trim());
+                for (int X = 0; X < USER.VisibleFieldCount; X++)
+                {
+                    lines[X] = USER[X].ToString();
+                }
+
             }
-            DPT.Close();
             connection.Close();
+            int Y = 1;
+            for (int i = 0; i < 17; i++)
+            {
+
+                if (lines[i].ToString().Trim() != "NO")
+                {
+                    if (i >= 9) { Y = 2; }
+                    TICKET_TABLE.ForeColor = System.Drawing.Color.Black;
+                    StringBuilder Commands = new StringBuilder();
+                    Commands.Append("SELECT DSC FROM `departaments-cca`.cca where DPT = '" + (i + Y) + "' group by DSC order by DPT");
+                    MySqlCommand CMDs = new MySqlCommand(Commands.ToString(), connection);
+                    connection.Close();
+                    connection.Open();
+                    MySqlDataReader DPT = CMDs.ExecuteReader();
+                    while (DPT.Read())
+                    {
+                        DPTBox.Items.Add(DPT[0].ToString().Trim());
+                    }
+                    DPT.Close();
+                    connection.Close();
+                }
+
+            }
 
         }
         private string server;
@@ -268,6 +295,12 @@ namespace Eines_ATT_Clients
                 case "601":
                     NTPV = NTPV + " - PARFOIS II";
                     break;
+                case "701":
+                    NTPV = NTPV + " - FOM II";
+                    break;
+                case "710":
+                    NTPV = NTPV + " - MUY MUCHO II";
+                    break;
                 default:
                     NTPV = "";
                     break;
@@ -278,6 +311,7 @@ namespace Eines_ATT_Clients
         {
             try
             {
+
                 string Texto = "";
                 DataTable dataTable = new DataTable();
                 DataRow rowTable = dataTable.NewRow();
@@ -289,13 +323,19 @@ namespace Eines_ATT_Clients
                 dataTable.Columns.Add("Núm Tiquet");
                 dataTable.Columns.Add("Forma de pagament");
                 dataTable.Columns.Add("Import", typeof(decimal));
-
                 foreach (int Num in number)
                 {
                     MySqlConnection connectionTable = new MySqlConnection(ConnectionAXCAIXES());
                     StringBuilder CommandTable = new StringBuilder();
-                    CommandTable.Append("SELECT nterm, nreb, typlin, total FROM datacap where fecha = '" + Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd") + "' and nterm = '" + new string('0', 4 - Num.ToString().Length) + Num.ToString() + "' and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                    if (CLIENT_CODE.Text == "")
+                        CommandTable.Append("SELECT nterm, nreb, typlin, total FROM datacap where fecha = @fecha and nterm = @nterm and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                    else
+                        CommandTable.Append("SELECT nterm, nreb, typlin, total FROM datacap where fecha = @fecha and nterm = @nterm and cliente like @clientcode and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+
                     MySqlCommand CMD = new MySqlCommand(CommandTable.ToString(), connectionTable);
+                    CMD.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                    CMD.Parameters.AddWithValue("@nterm", new string('0', 4 - Num.ToString().Length) + Num.ToString());
+                    CMD.Parameters.AddWithValue("@clientcode", "%" + CLIENT_CODE.Text + "%");
                     connectionTable.Close();
                     connectionTable.Open();
                     MySqlDataReader TABLE = CMD.ExecuteReader();
@@ -353,7 +393,7 @@ namespace Eines_ATT_Clients
                             }
                         }
                     }
-                    if (FileIP == "") { break; }
+                    if (FileIP == "") { goto siguiente; }
                     DirectoryInfo dir = new DirectoryInfo(FileIP);
                     foreach (var file in dir.GetFiles())
                     {
@@ -364,21 +404,21 @@ namespace Eines_ATT_Clients
                                 File.Delete(Directory.GetCurrentDirectory() + @"\journal-copy.txt");
                             }
                             File.Copy(FileIP + file.Name, Directory.GetCurrentDirectory() + @"\journal-copy.txt");
-                            using (StreamReader sr = File.OpenText(Directory.GetCurrentDirectory() + @"\journal-copy.txt"))
+                            using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\journal-copy.txt", Encoding.Default))
                             {
                                 Texto += sr.ReadToEnd();
                             }
                         }
                     }
+                siguiente:;
                 }
-                TICKETS_LIST.Text = Texto;
-
                 if (Texto != "")
                 {
+                    TICKETS_LIST.Text = Texto;
                     errorlbl.Text = "";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 errorlbl.Text = "ERROR! Envieu un correu a Fran d'informatica";
             }
@@ -390,7 +430,6 @@ namespace Eines_ATT_Clients
             int[] TPV;
             try
             {
-
                 switch (TPVBox.Text)
                 {
                     case "CAIXES MULTIMEDIA":
@@ -400,7 +439,7 @@ namespace Eines_ATT_Clients
                         TPV = new int[] { 9, 14 };
                         break;
                     case "CAIXES ALIMENTACIÓ":
-                        TPV = new int[] { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62 };
+                        TPV = new int[] { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 70, 71, 72 };
                         break;
                     case "CAIXES MR. BRICOLAGE":
                         TPV = new int[] { 201, 202, 203 };
@@ -442,7 +481,6 @@ namespace Eines_ATT_Clients
             CS.TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px;
             Hide();
         }
-
         private void StartTimeTK_Tick(object sender, EventArgs e)
         {
             Control_Screen CS = (Control_Screen)this.ParentForm;

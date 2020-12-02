@@ -30,6 +30,7 @@ namespace Eines_ATT_Clients
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Control_Screen));
             this.TOPBar = new System.Windows.Forms.Panel();
+            this.CCA = new System.Windows.Forms.PictureBox();
             this.USERLbl = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.USERIcon = new System.Windows.Forms.Label();
@@ -49,6 +50,7 @@ namespace Eines_ATT_Clients
             this.AcceptLOGIN = new System.Windows.Forms.Button();
             this.StartTime = new System.Windows.Forms.Timer(this.components);
             this.TOPBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CCA)).BeginInit();
             this.LEFTBar.SuspendLayout();
             this.BOTTOMBar.SuspendLayout();
             this.MiddlePanel.SuspendLayout();
@@ -57,6 +59,7 @@ namespace Eines_ATT_Clients
             // TOPBar
             // 
             this.TOPBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(84)))), ((int)(((byte)(146)))));
+            this.TOPBar.Controls.Add(this.CCA);
             this.TOPBar.Controls.Add(this.USERLbl);
             this.TOPBar.Controls.Add(this.label1);
             this.TOPBar.Controls.Add(this.USERIcon);
@@ -69,11 +72,22 @@ namespace Eines_ATT_Clients
             this.TOPBar.Size = new System.Drawing.Size(1185, 40);
             this.TOPBar.TabIndex = 0;
             // 
+            // CCA
+            // 
+            this.CCA.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.CCA.Image = global::Eines_ATT_Clients.Properties.Resources.CCA;
+            this.CCA.Location = new System.Drawing.Point(554, -4);
+            this.CCA.Name = "CCA";
+            this.CCA.Size = new System.Drawing.Size(100, 48);
+            this.CCA.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.CCA.TabIndex = 5;
+            this.CCA.TabStop = false;
+            // 
             // USERLbl
             // 
             this.USERLbl.Font = new System.Drawing.Font("Century Gothic", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.USERLbl.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.USERLbl.Location = new System.Drawing.Point(294, 0);
+            this.USERLbl.Location = new System.Drawing.Point(275, 0);
             this.USERLbl.Name = "USERLbl";
             this.USERLbl.Size = new System.Drawing.Size(187, 40);
             this.USERLbl.TabIndex = 1;
@@ -94,7 +108,7 @@ namespace Eines_ATT_Clients
             // 
             this.USERIcon.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.USERIcon.Image = global::Eines_ATT_Clients.Properties.Resources.icons8_businesswoman_32px2;
-            this.USERIcon.Location = new System.Drawing.Point(260, 0);
+            this.USERIcon.Location = new System.Drawing.Point(241, 0);
             this.USERIcon.Name = "USERIcon";
             this.USERIcon.Size = new System.Drawing.Size(33, 40);
             this.USERIcon.TabIndex = 1;
@@ -156,7 +170,6 @@ namespace Eines_ATT_Clients
             // CUPONESBtn
             // 
             this.CUPONESBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.CUPONESBtn.Enabled = false;
             this.CUPONESBtn.FlatAppearance.BorderSize = 0;
             this.CUPONESBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.CUPONESBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -164,13 +177,14 @@ namespace Eines_ATT_Clients
             this.CUPONESBtn.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.CUPONESBtn.Image = global::Eines_ATT_Clients.Properties.Resources.icons8_voucher_50px;
             this.CUPONESBtn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.CUPONESBtn.Location = new System.Drawing.Point(-3, 64);
+            this.CUPONESBtn.Location = new System.Drawing.Point(-2, 64);
             this.CUPONESBtn.Name = "CUPONESBtn";
             this.CUPONESBtn.Size = new System.Drawing.Size(257, 60);
             this.CUPONESBtn.TabIndex = 0;
             this.CUPONESBtn.Text = "Comprobació de &cupons";
             this.CUPONESBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.CUPONESBtn.UseVisualStyleBackColor = true;
+            this.CUPONESBtn.Click += new System.EventHandler(this.CUPONESBtn_Click);
             // 
             // TIQUETBtn
             // 
@@ -311,6 +325,7 @@ namespace Eines_ATT_Clients
             this.Text = "Form1";
             this.TOPBar.ResumeLayout(false);
             this.TOPBar.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CCA)).EndInit();
             this.LEFTBar.ResumeLayout(false);
             this.BOTTOMBar.ResumeLayout(false);
             this.BOTTOMBar.PerformLayout();
@@ -342,6 +357,7 @@ namespace Eines_ATT_Clients
         public System.Windows.Forms.Label ErrorLOGIN;
         public System.Windows.Forms.Timer StartTime;
         private IContainer components;
+        private System.Windows.Forms.PictureBox CCA;
     }
 }
 

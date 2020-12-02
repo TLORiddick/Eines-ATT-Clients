@@ -17,6 +17,11 @@ namespace Eines_ATT_Clients
         {
             get { return TIQUETBtn; }
         }
+        public static string GETUSER
+        {
+            get;
+            set;
+        }
         public Control_Screen()
         {
             InitializeComponent();
@@ -46,6 +51,7 @@ namespace Eines_ATT_Clients
         private string server;
         private string uid;
         private string password;
+        public string Paper;
         public string Connection()
         {
             server = "192.168.29.11";
@@ -59,7 +65,6 @@ namespace Eines_ATT_Clients
             ErrorLOGIN.Text = "";
             try
             {
-
                 MySqlConnection connection = new MySqlConnection(Connection());
                 StringBuilder Command = new StringBuilder();
                 Command.Append("SELECT Empleado FROM `departaments-cca`.allowed where ID = '" + LOGINTXT.Text + "';");
@@ -70,32 +75,45 @@ namespace Eines_ATT_Clients
                 while (USER.Read())
                 {
                     USERLbl.Text = USER[0].ToString();
+                    GETUSER = USERLbl.Text;
                 }
                 if (USERLbl.Text != "UserName")
                 {
-                    
-                    Tiquet TK = new Tiquet();
-                    AcceptLOGIN.Visible = false;
-                    LOGIN.Visible = false;
-                    LOGINTXT.Visible = false;
-                    LOGO.Visible = false;
-                    MiddlePanel.Controls.Add(TK);
-                    TK.Dock = DockStyle.Fill;
-                    StartTime.Interval = 1;
-                    StartTime.Start();
-                    TK.Show();
-                    TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px_1;
-
-
+                    if (Paper == "Voucher")
+                    {
+                        Voucher TK = new Voucher();
+                        AcceptLOGIN.Visible = false;
+                        LOGIN.Visible = false;
+                        LOGINTXT.Visible = false;
+                        LOGO.Visible = false;
+                        MiddlePanel.Controls.Add(TK);
+                        TK.Dock = DockStyle.Fill;
+                        StartTime.Interval = 1;
+                        StartTime.Start();
+                        TK.Show();
+                        CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px_1;
+                    }
+                    else
+                    {
+                        Tiquet TK = new Tiquet();
+                        AcceptLOGIN.Visible = false;
+                        LOGIN.Visible = false;
+                        LOGINTXT.Visible = false;
+                        LOGO.Visible = false;
+                        MiddlePanel.Controls.Add(TK);
+                        TK.Dock = DockStyle.Fill;
+                        StartTime.Interval = 1;
+                        StartTime.Start();
+                        TK.Show();
+                        TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px_1;
+                    }
                 }
                 else
                 {
                     ErrorLOGIN.Text = "Usuari no trobat";
                 }
-
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 ErrorLOGIN.Text = "Usuari no trobat";
@@ -103,8 +121,10 @@ namespace Eines_ATT_Clients
         }
         private void TIQUETBtn_Click(object sender, EventArgs e)
         {
+            CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px;
             if (USERLbl.Text == "UserName")
             {
+                Paper = "Tiquet";
                 AcceptLOGIN.Visible = true;
                 LOGIN.Visible = true;
                 LOGINTXT.Visible = true;
@@ -131,7 +151,6 @@ namespace Eines_ATT_Clients
                 Accept_Click(sender, e);
             }
         }
-
         private void StartTime_Tick(object sender, EventArgs e)
         {
 
@@ -140,6 +159,30 @@ namespace Eines_ATT_Clients
             {
                 LEFTBar.Width = 55;
                 StartTime.Stop();
+            }
+        }
+        private void CUPONESBtn_Click(object sender, EventArgs e)
+        {
+            TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px;
+            if (USERLbl.Text == "UserName")
+            {
+                Paper = "Voucher";
+                AcceptLOGIN.Visible = true;
+                LOGIN.Visible = true;
+                LOGINTXT.Visible = true;
+                LOGO.Visible = true;
+                LOGINTXT.Focus();
+            }
+            else
+            {
+                MiddlePanel.Controls.Clear();
+                Voucher VC = new Voucher();
+                MiddlePanel.Controls.Add(VC);
+                VC.Dock = DockStyle.Fill;
+                StartTime.Interval = 1;
+                StartTime.Start();
+                VC.Show();
+                CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px_1;
             }
         }
     }

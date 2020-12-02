@@ -99,6 +99,12 @@
     <Compile Include="Tiquet.Designer.cs">
       <DependentUpon>Tiquet.cs</DependentUpon>
     </Compile>
+    <Compile Include="Voucher.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Voucher.Designer.cs">
+      <DependentUpon>Voucher.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Tasks.resx">
       <DependentUpon>Tasks.cs</DependentUpon>
     </EmbeddedResource>
@@ -108,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tiquet.resx">
       <DependentUpon>Tiquet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Voucher.resx">
+      <DependentUpon>Voucher.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -154,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons8_purchase_order.ico" />
+    <None Include="Images\CCA.png" />
     <None Include="Images\icons8_voucher_50px_1.png" />
     <None Include="Images\icons8_purchase_order_50px_1.png" />
     <None Include="Resources\Image1.png" />
