@@ -75,6 +75,11 @@ namespace Eines_ATT_Clients
             string connectionString;
             return connectionString = "SERVER=" + server + ";" + "user id=" + uid + ";" + "PASSWORD=" + password + ";";
         }
+        public string ConnectionFDL()
+        {
+            string connectionString = "datasource=srvfidelia;port=3306;username=root;password=gnxpos;database=journal;";
+            return connectionString;
+        }
         public string ConnectionAXCAIXES()
         {
             string connectionString = "datasource=srvfidelia;port=3306;username=root;password=gnxpos;database=stocks;";
@@ -383,15 +388,15 @@ namespace Eines_ATT_Clients
                         {
                             FileIP = @"\\srvpos\GEINSA\GnxServer\" + IP[1].ToString().Trim() + @"\";
                         }
-                        else
-                        {
-                            Ping CHK = new Ping();
-                            PingReply reply = CHK.Send(IP[0].ToString().Trim(), 1000);
-                            if (reply.Status == IPStatus.Success)
-                            {
-                                FileIP = @"\\" + IP[0].ToString().Trim() + @"\geinsa\GnxPOS\Bckup\";
-                            }
-                        }
+                        //else
+                        //{
+                        //    Ping CHK = new Ping();
+                        //    PingReply reply = CHK.Send(IP[0].ToString().Trim(), 1000);
+                        //    if (reply.Status == IPStatus.Success)
+                        //    {
+                        //        FileIP = @"\\" + IP[0].ToString().Trim() + @"\geinsa\GnxPOS\Bckup\";
+                        //    }
+                        //}
                     }
                     if (FileIP == "") { goto siguiente; }
                     DirectoryInfo dir = new DirectoryInfo(FileIP);
@@ -411,11 +416,26 @@ namespace Eines_ATT_Clients
                         }
                     }
                 siguiente:;
-                }
-                if (Texto != "")
-                {
-                    TICKETS_LIST.Text = Texto;
-                    errorlbl.Text = "";
+                    MySqlConnection CNNFDL = new MySqlConnection(ConnectionFDL());
+                    StringBuilder CommandFDL = new StringBuilder();
+                    CommandFDL.Append("SELECT * FROM tickets where fecha = @fecha and nterm = @nterm order by tienda, nterm, nreb, nlinea");
+
+                    MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
+                    CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                    CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - Num.ToString().Length) + Num.ToString());
+                    CNNFDL.Close();
+                    CNNFDL.Open();
+                    MySqlDataReader FDL = CMDFDL.ExecuteReader();
+                    string prueba;
+                    while (FDL.Read())
+                    {
+                        Texto += FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + FDL[4].ToString() + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString() + "\r\n";
+                    }
+                    if (Texto != "")
+                    {
+                        TICKETS_LIST.Text = Texto;
+                        errorlbl.Text = "";
+                    }
                 }
             }
             catch (Exception ex)
