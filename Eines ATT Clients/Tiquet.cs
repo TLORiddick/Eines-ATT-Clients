@@ -305,7 +305,6 @@ namespace Eines_ATT_Clients
             int Point_End = TICKETS_LIST.Find(b) - Point_Start;
             TICKETS_LIST.Select(Point_Start, Point_End - 5);
 
-
         }
         public string TPV(string NTPV)
         {
