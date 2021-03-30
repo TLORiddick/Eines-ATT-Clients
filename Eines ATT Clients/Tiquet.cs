@@ -55,6 +55,7 @@ namespace Eines_ATT_Clients
                     MySqlDataReader DPT = CMDs.ExecuteReader();
                     while (DPT.Read())
                     {
+
                         DPTBox.Items.Add(DPT[0].ToString().Trim());
                     }
                     DPT.Close();
@@ -67,6 +68,16 @@ namespace Eines_ATT_Clients
         private string server;
         private string uid;
         private string password;
+
+        //public bool caja(string nuser)
+        //{
+        //    bool OK;
+        //    switch (nuser)
+        //    {
+        //        default:
+        //    }
+        //    return OK;
+        //}
         public string Connection()
         {
             server = "192.168.29.11";
@@ -90,6 +101,123 @@ namespace Eines_ATT_Clients
 
             return connectionString;
         }
+
+        private bool ncaja(string resp, string caja)
+        {
+            bool cajacorrecta;
+            cajacorrecta = false;
+            switch (resp)
+            {
+                case "84930":
+                    if (caja == "24" || caja == "40" || caja == "701")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "103399":
+                    if (caja == "63" || caja == "64" || caja == "66")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "100332":
+                    if (caja == "15" || caja == "19" || caja == "20" || caja == "21")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "98444":
+                        cajacorrecta = true;
+                    break;
+                case "104090":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "90875":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "77585":
+                    if (caja == "9" || caja == "14")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "1635":
+                   
+                        cajacorrecta = true;
+                    
+                    break;
+                case "100372":
+                    if (caja == "18" || caja == "710" || caja == "65" || caja == "81")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "103982":
+                        cajacorrecta = true;
+                    
+                    break;
+                case "95548":
+                        cajacorrecta = true;
+                    break;
+                case "103470":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "105661":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "93901":
+                    if (caja == "201" || caja == "202" || caja == "203")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "54992":
+                    
+                        cajacorrecta = true;
+                   
+                    break;
+                case "78727":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "105193":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "103784":
+                    
+                        cajacorrecta = true;
+                    break;
+                case "102920":
+                    if (caja == "1" || caja == "3")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "100541":
+                    
+                        cajacorrecta = true;
+                    
+                    break;
+                case "91996":
+                    
+                        cajacorrecta = true;
+                    break;
+                default:
+                    break;
+            }
+            return cajacorrecta;
+        }
         private void DPTBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -104,23 +232,28 @@ namespace Eines_ATT_Clients
             bool checkindex = false;
             while (DPT.Read())
             {
-                string TPVResult = TPV(DPT[0].ToString().Trim());
-                if (TPVResult != "")
+                bool chkc;
+                chkc = ncaja(Control_Screen.nuser, DPT[0].ToString().Trim());
+                if (chkc)
                 {
-                    foreach (var index in TPVBox.Items)
+                    string TPVResult = TPV(DPT[0].ToString().Trim());
+                    if (TPVResult != "")
                     {
-                        if (index == TPVResult)
+                        foreach (var index in TPVBox.Items)
                         {
-                            checkindex = true;
+                            if (index == TPVResult)
+                            {
+                                checkindex = true;
+                            }
                         }
-                    }
-                    if (!checkindex)
-                    {
-                        TPVBox.Items.Add(TPVResult);
-                    }
-                    else
-                    {
-                        checkindex = false;
+                        if (!checkindex)
+                        {
+                            TPVBox.Items.Add(TPVResult);
+                        }
+                        else
+                        {
+                            checkindex = false;
+                        }
                     }
                 }
             }

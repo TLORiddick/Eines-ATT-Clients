@@ -52,6 +52,11 @@ namespace Eines_ATT_Clients
         private string uid;
         private string password;
         public string Paper;
+        public static string nuser 
+        {
+            get;
+            set;
+        }
         public string Connection()
         {
             server = "192.168.29.11";
@@ -62,6 +67,7 @@ namespace Eines_ATT_Clients
         }
         private void Accept_Click(object sender, EventArgs e)
         {
+            nuser = LOGINTXT.Text;
             ErrorLOGIN.Text = "";
             try
             {
@@ -115,7 +121,7 @@ namespace Eines_ATT_Clients
             }
             catch (Exception ex)
             {
-
+                nuser = string.Empty;
                 ErrorLOGIN.Text = "Usuari no trobat";
             }
         }
