@@ -154,7 +154,8 @@ namespace Eines_ATT_Clients
                     
                     break;
                 case "95548":
-                        cajacorrecta = true;
+                case "104500":
+                    cajacorrecta = true;
                     break;
                 case "103470":
                     
