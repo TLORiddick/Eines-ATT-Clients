@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.IO;
 using System.Net.NetworkInformation;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace Eines_ATT_Clients
 {
@@ -69,22 +71,13 @@ namespace Eines_ATT_Clients
         private string uid;
         private string password;
 
-        //public bool caja(string nuser)
-        //{
-        //    bool OK;
-        //    switch (nuser)
-        //    {
-        //        default:
-        //    }
-        //    return OK;
-        //}
         public string Connection()
         {
             server = "192.168.29.11";
             uid = "CCA";
             password = "Attclients02";
-            string connectionString;
-            return connectionString = "SERVER=" + server + ";" + "user id=" + uid + ";" + "PASSWORD=" + password + ";";
+            string connectionString = "SERVER=" + server + ";" + "user id=" + uid + ";" + "PASSWORD=" + password + ";";
+            return connectionString;
         }
         public string ConnectionFDL()
         {
@@ -174,6 +167,7 @@ namespace Eines_ATT_Clients
                     
                     break;
                 case "93901":
+                case "100505":
                     if (caja == "201" || caja == "202" || caja == "203")
                     {
                         cajacorrecta = true;
@@ -243,7 +237,7 @@ namespace Eines_ATT_Clients
                     string TPVResult = TPV(DPT[0].ToString().Trim());
                     if (TPVResult != "")
                     {
-                        foreach (var index in TPVBox.Items)
+                        foreach (string index in TPVBox.Items)
                         {
                             if (index == TPVResult)
                             {
@@ -302,12 +296,21 @@ namespace Eines_ATT_Clients
 
             int selectedrowindex = TICKET_TABLE.SelectedCells[0].RowIndex;
             DataGridViewRow selectedRow = TICKET_TABLE.Rows[selectedrowindex];
-            string a = Convert.ToString(selectedRow.Cells[0].Value) + "\t" + Convert.ToString(selectedRow.Cells[1].Value);
-            string b = selectedRow.Cells[0].Value.ToString() + "\t" + new string('0', 4 - (Convert.ToInt32(selectedRow.Cells[1].Value) + 1).ToString().Length) + (Convert.ToInt32(selectedRow.Cells[1].Value) + 1).ToString();
-            TICKETS_LIST.Focus();
-            int Point_Start = TICKETS_LIST.Find(a) - 5;
-            int Point_End = TICKETS_LIST.Find(b) - Point_Start;
-            TICKETS_LIST.Select(Point_Start, Point_End - 5);
+            if (PURCHASE_Date.Value.Date == DateTime.Today.Date)
+            {
+                string a = Convert.ToString(selectedRow.Cells[0].Value) + "\t" + Convert.ToString(selectedRow.Cells[1].Value);
+                string b = selectedRow.Cells[0].Value.ToString() + "\t" + new string('0', 4 - (Convert.ToInt32(selectedRow.Cells[1].Value) + 1).ToString().Length) + (Convert.ToInt32(selectedRow.Cells[1].Value) + 1).ToString();
+                TICKETS_LIST.Focus();
+                int Point_Start = TICKETS_LIST.Find(a) - 5;
+                int Point_End = TICKETS_LIST.Find(b) - Point_Start;
+                TICKETS_LIST.Select(Point_Start, Point_End - 5);
+            }
+            else
+            {
+                string nterm = selectedRow.Cells[0].Value.ToString();
+                string nreb = selectedRow.Cells[1].Value.ToString();
+                Check_Tiquet(nreb, nterm);
+            }
 
         }
         public string TPV(string NTPV)
@@ -452,8 +455,6 @@ namespace Eines_ATT_Clients
         {
             try
             {
-
-                string Texto = "";
                 DataTable dataTable = new DataTable();
                 DataRow rowTable = dataTable.NewRow();
                 TICKETS_LIST.Text = "";
@@ -462,80 +463,112 @@ namespace Eines_ATT_Clients
                 rowTable.Delete();
                 dataTable.Columns.Add("Caixa");
                 dataTable.Columns.Add("Núm Tiquet");
+                dataTable.Columns.Add("Hora");
                 dataTable.Columns.Add("Forma de pagament");
                 dataTable.Columns.Add("Import", typeof(decimal));
+                string Group_num = string.Empty;
+                int n_caixes = 0;
                 foreach (int Num in number)
                 {
-                    MySqlConnection connectionTable = new MySqlConnection(ConnectionAXCAIXES());
-                    StringBuilder CommandTable = new StringBuilder();
-                    if (CLIENT_CODE.Text == "")
-                        CommandTable.Append("SELECT nterm, nreb, typlin, total FROM datacap where fecha = @fecha and nterm = @nterm and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
-                    else
-                        CommandTable.Append("SELECT nterm, nreb, typlin, total FROM datacap where fecha = @fecha and nterm = @nterm and cliente like @clientcode and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
-
-                    MySqlCommand CMD = new MySqlCommand(CommandTable.ToString(), connectionTable);
-                    CMD.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
-                    CMD.Parameters.AddWithValue("@nterm", new string('0', 4 - Num.ToString().Length) + Num.ToString());
-                    CMD.Parameters.AddWithValue("@clientcode", "%" + CLIENT_CODE.Text + "%");
-                    connectionTable.Close();
-                    connectionTable.Open();
-                    MySqlDataReader TABLE = CMD.ExecuteReader();
-                    while (TABLE.Read())
+                    if (Group_num != string.Empty)
                     {
-                        if (TABLE[1].ToString() == control)
-                        {
-                            rowTable.SetField(3, amount + Convert.ToDecimal(TABLE[3]));
-                        }
-                        else
-                        {
-                            rowTable = dataTable.NewRow();
-                            rowTable[0] = TABLE[0].ToString();
-                            rowTable[1] = TABLE[1].ToString();
-                            control = rowTable[1].ToString();
-                            rowTable[2] = GetPayment_Name(TABLE[2].ToString());
-                            rowTable[3] = Convert.ToDecimal(TABLE[3].ToString());
-                            amount = Convert.ToDecimal(rowTable[3]);
-                            dataTable.Rows.Add(rowTable);
-                        }
+                        Group_num += ",";
+                        n_caixes++;
                     }
-                    TABLE.Close();
-                    connectionTable.Close();
+                    Group_num += "'" + new string('0', 4 - Num.ToString().Length) + Num.ToString() + "'";
+
                 }
+                MySqlConnection connectionTable = new MySqlConnection(ConnectionAXCAIXES());
+                StringBuilder CommandTable = new StringBuilder();
+                if (n_caixes == 0)
+                {
+                    if (CLIENT_CODE.Text == "")
+                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm = " + Group_num + " and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                    else
+                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm = " + Group_num + " and cliente like @clientcode and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                }else
+                {
+                    if (CLIENT_CODE.Text == "")
+                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm IN(" + Group_num + ") and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                    else
+                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm IN(" + Group_num + ") and cliente like @clientcode and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                }
+
+                MySqlCommand CMD = new MySqlCommand(CommandTable.ToString(), connectionTable);
+                //CMD.Parameters.Add("@nterm",MySqlDbType.VarChar);
+                CMD.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                //CMD.Parameters.AddWithValue("@nterm", Group_num);
+                CMD.Parameters.AddWithValue("@clientcode", "%" + CLIENT_CODE.Text + "%");
+                connectionTable.Close();
+                connectionTable.Open();
+                MySqlDataReader TABLE = CMD.ExecuteReader();
+                while (TABLE.Read())
+                {
+                    if (TABLE[1].ToString() == control)
+                    {
+                        rowTable.SetField(4, amount + Convert.ToDecimal(TABLE[4]));
+                    }
+                    else
+                    {
+                        rowTable = dataTable.NewRow();
+                        rowTable[0] = TABLE[0].ToString();
+                        rowTable[1] = TABLE[1].ToString();
+                        control = rowTable[1].ToString();
+                        rowTable[2] = TABLE[2].ToString();
+                        rowTable[3] = GetPayment_Name(TABLE[3].ToString());
+                        rowTable[4] = Convert.ToDecimal(TABLE[4].ToString());
+                        amount = Convert.ToDecimal(rowTable[4]);
+                        dataTable.Rows.Add(rowTable);
+                    }
+                }
+                TABLE.Close();
+                connectionTable.Close();
                 TICKET_TABLE.DataSource = dataTable;
                 TICKET_TABLE.Font = new Font("Century Gothic", 10F);
                 TICKET_TABLE.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 TICKET_TABLE.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 TICKET_TABLE.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 TICKET_TABLE.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                Group_num = string.Empty;
+                n_caixes = 0;
                 foreach (int Num in number)
                 {
-                    MySqlConnection connectionIP = new MySqlConnection(Connection());
-                    StringBuilder CommandIP = new StringBuilder();
-                    CommandIP.Append("SELECT LOC, LOC2 FROM `departaments-cca`.cca where DSC = '" + DPTBox.Text + "' and TPV = '" + Num.ToString() + "';");
-                    MySqlCommand CMDIP = new MySqlCommand(CommandIP.ToString(), connectionIP);
-                    connectionIP.Close();
-                    connectionIP.Open();
-                    MySqlDataReader IP = CMDIP.ExecuteReader();
-                    string FileIP = "";
-                    while (IP.Read())
+                    if (Group_num != string.Empty)
                     {
-
-                        if (PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
-                        {
-                            FileIP = @"\\srvpos\GEINSA\GnxServer\" + IP[1].ToString().Trim() + @"\";
-                        }
-                        //else
-                        //{
-                        //    Ping CHK = new Ping();
-                        //    PingReply reply = CHK.Send(IP[0].ToString().Trim(), 1000);
-                        //    if (reply.Status == IPStatus.Success)
-                        //    {
-                        //        FileIP = @"\\" + IP[0].ToString().Trim() + @"\geinsa\GnxPOS\Bckup\";
-                        //    }
-                        //}
+                        Group_num += ",";
+                        n_caixes++;
                     }
-                    if (FileIP == "") { goto siguiente; }
-                    DirectoryInfo dir = new DirectoryInfo(FileIP);
+                    Group_num += "'" + Num.ToString() + "'";
+
+                }
+                MySqlConnection connectionIP = new MySqlConnection(Connection());
+                    StringBuilder CommandIP = new StringBuilder();
+                if (n_caixes == 0)
+                {
+                    CommandIP.Append("SELECT LOC, LOC2 FROM `departaments-cca`.cca where DSC = '" + DPTBox.Text + "' and TPV = " + Group_num + ";");
+                }
+                else
+                {
+                    CommandIP.Append("SELECT LOC, LOC2 FROM `departaments-cca`.cca where DSC = '" + DPTBox.Text + "' and TPV IN(" + Group_num + ");");
+                }
+                MySqlCommand CMDIP = new MySqlCommand(CommandIP.ToString(), connectionIP);
+                connectionIP.Close();
+                connectionIP.Open();
+                MySqlDataReader IP = CMDIP.ExecuteReader();
+                List<string> FileIP = new List<string>();
+                while (IP.Read())
+                {
+
+                    if (PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
+                    {
+                        FileIP.Add(@"\\srvpos\GEINSA\GnxServer\" + IP[1].ToString().Trim() + @"\");
+                    }
+                }
+                if (FileIP.Count == 0) { goto siguiente; }
+                foreach (string fl in FileIP)
+                {
+                    DirectoryInfo dir = new DirectoryInfo(fl);
+                
                     foreach (var file in dir.GetFiles())
                     {
                         if (file.CreationTime.Date.ToString().Substring(0, 10) == PURCHASE_Date.Text.ToString().Substring(0, 10) && file.Name.Contains("journal"))
@@ -544,40 +577,40 @@ namespace Eines_ATT_Clients
                             {
                                 File.Delete(Directory.GetCurrentDirectory() + @"\journal-copy.txt");
                             }
-                            File.Copy(FileIP + file.Name, Directory.GetCurrentDirectory() + @"\journal-copy.txt");
+                            File.Copy(fl + file.Name, Directory.GetCurrentDirectory() + @"\journal-copy.txt");
                             using (StreamReader sr = new StreamReader(Directory.GetCurrentDirectory() + @"\journal-copy.txt", Encoding.Default))
                             {
-                                Texto += sr.ReadToEnd();
+                                TICKETS_LIST.Text += sr.ReadToEnd();
                             }
                         }
                     }
-                siguiente:;
-                    MySqlConnection CNNFDL = new MySqlConnection(ConnectionFDL());
-                    StringBuilder CommandFDL = new StringBuilder();
-                    CommandFDL.Append("SELECT * FROM tickets where fecha = @fecha and nterm = @nterm order by tienda, nterm, nreb, nlinea");
-
-                    MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
-                    CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
-                    CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - Num.ToString().Length) + Num.ToString());
-                    CNNFDL.Close();
-                    CNNFDL.Open();
-                    MySqlDataReader FDL = CMDFDL.ExecuteReader();
-                    string prueba;
-                    while (FDL.Read())
-                    {
-                        Texto += FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + FDL[4].ToString() + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString() + "\r\n";
-                    }
-                    if (Texto != "")
-                    {
-                        TICKETS_LIST.Text = Texto;
-                        errorlbl.Text = "";
-                    }
                 }
+            siguiente:;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 errorlbl.Text = "ERROR! Envieu un correu a Fran d'informatica";
             }
+        }
+        private void Check_Tiquet(string nreb, string nterm)
+        {
+            MySqlConnection CNNFDL = new MySqlConnection(ConnectionFDL());
+            StringBuilder CommandFDL = new StringBuilder();
+            CommandFDL.Append("SELECT * FROM tickets where fecha = @fecha and nterm = @nterm and nreb = @nreb order by nterm, nreb, nlinea");
+            MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
+            CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+            CMDFDL.Parameters.AddWithValue("@nreb", nreb);
+            CMDFDL.Parameters.AddWithValue("@nterm", nterm);
+            CNNFDL.Close();
+            CNNFDL.Open();
+            MySqlDataReader FDL = CMDFDL.ExecuteReader();
+            TICKETS_LIST.Text = string.Empty;
+            while (FDL.Read())
+            {
+                TICKETS_LIST.Text += FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + FDL[4].ToString() + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString() + "\r\n";
+            }
+            errorlbl.Text = "";
+            CNNFDL.Close();
         }
         private void GOBtn_Click(object sender, EventArgs e)
         {
@@ -624,7 +657,6 @@ namespace Eines_ATT_Clients
             }
             catch (Exception)
             {
-
                 errorlbl.Text = "ERROR! Ha de seleccionar una data, el departament i la caixa";
             }
         }
@@ -646,6 +678,133 @@ namespace Eines_ATT_Clients
                 CS.LEFTBar.Width = 245;
                 StartTimeTK.Stop();
             }
+        }
+
+        private void Download_File_Click(object sender, EventArgs e)
+        {
+            Downloading.RunWorkerAsync();
+        }
+
+        private void Downloading_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                try
+                {
+                    FolderBrowserDialog ofd = new FolderBrowserDialog();
+                    int[] numero;
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        Downloadlbl.Visible = true;
+                        progressBar1.Visible = true;
+                        progressBar1.Value = 1;
+                        progressBar1.Step = 1;
+                        switch (TPVBox.Text)
+                        {
+                            case "CAIXES MULTIMEDIA":
+                                numero = new int[] { 1, 3 };
+                                break;
+                            case "CAIXES JUGUETTOS/ABACUS":
+                                numero = new int[] { 9, 14 };
+                                break;
+                            case "CAIXES ALIMENTACIÓ":
+                                numero = new int[] { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 70, 71, 72 };
+                                break;
+                            case "CAIXES MR. BRICOLAGE":
+                                numero = new int[] { 201, 202, 203 };
+                                break;
+                            case "CAIXES UEXPRESS":
+                                numero = new int[] { 301, 302, 303, 304 };
+                                break;
+                            case "CAIXES CAPRABO":
+                                numero = new int[] { 401, 402, 403, 404, 405, 406, 407, 408, 411, 412, 413, 414 };
+                                break;
+                            case "CAIXES DUTY FREE":
+                                numero = new int[] { 5, 6, 7 };
+                                break;
+                            case "CAIXES CAFETERIA":
+                                numero = new int[] { 63, 64, 66 };
+                                break;
+                            case "CAIXES FRESH":
+                                numero = new int[] { 501, 502, 503, 504 };
+                                break;
+                            default:
+                                numero = new int[] { Convert.ToInt32(TPVBox.Text.Substring(0, TPVBox.Text.IndexOf("-") - 1).Trim()) };
+                                break;
+                        }
+                        string Path = ofd.SelectedPath;
+                        MySqlConnection CNNFDL = new MySqlConnection(ConnectionFDL());
+                        StringBuilder CommandFDL = new StringBuilder();
+                        int count_rows = 0;
+                        CNNFDL.Close();
+                        foreach (int nterm in numero)
+                        {
+                            CommandFDL = new StringBuilder();
+                            CommandFDL.Append("SELECT COUNT(*) FROM tickets where fecha = @fecha and nterm = @nterm order by nterm, nreb, nlinea");
+                            MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
+                            CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                            CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - nterm.ToString().Length) + nterm.ToString());
+                            CNNFDL.Close();
+                            CNNFDL.Open();
+                            MySqlDataReader FDL = CMDFDL.ExecuteReader();
+                            while (FDL.Read())
+                            {
+                                count_rows += Convert.ToInt32(FDL[0]);
+                            }
+                        }
+                        CNNFDL.Close();
+                        progressBar1.Maximum = count_rows;
+                        if (File.Exists(Path + @"\" + TPVBox.Text + ".txt"))
+                        {
+                            if (File.Exists(Path + @"\" + TPVBox.Text + ".txt.old"))
+                            {
+                                File.Delete(Path + @"\" + TPVBox.Text + ".txt.old");
+                            }
+                            File.Move(Path + @"\" + TPVBox.Text + ".txt", Path + @"\" + TPVBox.Text + ".txt.old");
+                        }
+                        foreach (int nterm in numero)
+                        {
+                            CommandFDL = new StringBuilder();
+                            CommandFDL.Append("SELECT * FROM tickets where fecha = @fecha and nterm = @nterm order by nterm, nreb, nlinea");
+                            MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
+                            CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                            CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - nterm.ToString().Length) + nterm.ToString());
+                            CNNFDL.Close();
+                            CNNFDL.Open();
+                            //TICKETS_LIST.Text = string.Empty;
+                            MySqlDataReader FDL = CMDFDL.ExecuteReader();
+                            //int count_rows = Convert.ToInt32(CMDFDL.ExecuteScalar());
+                            while (FDL.Read())
+                            {
+                                using (StreamWriter SW = File.AppendText(Path + @"\" + TPVBox.Text + ".txt"))
+                                {
+                                    SW.WriteLine(FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + FDL[4].ToString() + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString());
+                                }
+                                progressBar1.PerformStep();
+                            }
+                            //errorlbl.Text = "";
+                        }
+                        CNNFDL.Close();
+                        MessageBox.Show("Descarrega Completada", "Completat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Downloadlbl.Visible = false;
+                        progressBar1.Visible = false;
+                        Process.Start("explorer.exe", Path);
+                    }
+                    else
+                    {
+                        Downloadlbl.Visible = false;
+                        progressBar1.Visible = false;
+                        MessageBox.Show("Descarrega cancel·lada");
+                        return;
+                    }
+                }
+                catch
+                {
+                    Downloadlbl.Visible = false;
+                    progressBar1.Visible = false;
+                    MessageBox.Show("Empleni els camps obligatoris", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            });
         }
     }
 }

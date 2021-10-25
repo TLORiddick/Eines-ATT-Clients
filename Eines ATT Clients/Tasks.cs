@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,7 +27,8 @@ namespace Eines_ATT_Clients
         public Control_Screen()
         {
             InitializeComponent();
-            CopyRightsLbl.Text = DateTime.Now.Year.ToString() + " - Franky's System";
+            CopyRightsLbl.Text = DateTime.Now.Year.ToString() + " - Franky's System " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            CopyRightsLbl.Location = new Point(BOTTOMBar.Width - TextRenderer.MeasureText(CopyRightsLbl.Text, CopyRightsLbl.Font).Width, CopyRightsLbl.Location.Y);
         }
         private void CLOSEBtn_Click(object sender, EventArgs e)
         {
@@ -119,7 +122,7 @@ namespace Eines_ATT_Clients
                     ErrorLOGIN.Text = "Usuari no trobat";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 nuser = string.Empty;
                 ErrorLOGIN.Text = "Usuari no trobat";

@@ -25,7 +25,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>\\srvfile01\Software\Eines Clients\</InstallUrl>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -177,6 +177,7 @@
     <None Include="Images\icons8_businesswoman_32px.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\downloading_updates_64px.png" />
     <Content Include="icons8_purchase_order.ico" />
     <None Include="Images\CCA.png" />
     <None Include="Images\icons8_voucher_50px_1.png" />

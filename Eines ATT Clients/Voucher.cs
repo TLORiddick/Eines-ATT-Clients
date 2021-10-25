@@ -303,7 +303,7 @@ namespace Eines_ATT_Clients
                     TiquetPreviewTxt.Text = Texto;
                     Cursor.Current = Cursors.Default;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     ERROR.Visible = true;
                     Cursor.Current = Cursors.Default;

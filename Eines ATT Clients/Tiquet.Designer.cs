@@ -24,8 +24,8 @@
         public void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DPTBox = new System.Windows.Forms.ComboBox();
             this.DPTLbl = new System.Windows.Forms.Label();
             this.TITLETiquet = new System.Windows.Forms.Label();
@@ -35,12 +35,16 @@
             this.TICKET_TABLE = new System.Windows.Forms.DataGridView();
             this.PURCHASE_Date = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
-            this.GOBtn = new System.Windows.Forms.Button();
             this.errorlbl = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.StartTimeTK = new System.Windows.Forms.Timer(this.components);
             this.CLIENT_CODE = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.Downloading = new System.ComponentModel.BackgroundWorker();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.Downloadlbl = new System.Windows.Forms.Label();
+            this.Download_File = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.GOBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TICKET_TABLE)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +55,7 @@
             this.DPTBox.FormattingEnabled = true;
             this.DPTBox.Location = new System.Drawing.Point(15, 87);
             this.DPTBox.Name = "DPTBox";
-            this.DPTBox.Size = new System.Drawing.Size(224, 29);
+            this.DPTBox.Size = new System.Drawing.Size(250, 29);
             this.DPTBox.TabIndex = 0;
             this.DPTBox.SelectedIndexChanged += new System.EventHandler(this.DPTBox_SelectedIndexChanged);
             // 
@@ -83,10 +87,10 @@
             this.TICKETS_LIST.BackColor = System.Drawing.Color.White;
             this.TICKETS_LIST.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TICKETS_LIST.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TICKETS_LIST.Location = new System.Drawing.Point(483, 141);
+            this.TICKETS_LIST.Location = new System.Drawing.Point(574, 141);
             this.TICKETS_LIST.Name = "TICKETS_LIST";
             this.TICKETS_LIST.ReadOnly = true;
-            this.TICKETS_LIST.Size = new System.Drawing.Size(506, 455);
+            this.TICKETS_LIST.Size = new System.Drawing.Size(509, 455);
             this.TICKETS_LIST.TabIndex = 3;
             this.TICKETS_LIST.Text = "";
             // 
@@ -95,16 +99,16 @@
             this.TPVBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.TPVBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.TPVBox.FormattingEnabled = true;
-            this.TPVBox.Location = new System.Drawing.Point(271, 87);
+            this.TPVBox.Location = new System.Drawing.Point(298, 87);
             this.TPVBox.Name = "TPVBox";
-            this.TPVBox.Size = new System.Drawing.Size(224, 29);
+            this.TPVBox.Size = new System.Drawing.Size(250, 29);
             this.TPVBox.TabIndex = 0;
             // 
             // TPVLbl
             // 
             this.TPVLbl.AutoSize = true;
             this.TPVLbl.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TPVLbl.Location = new System.Drawing.Point(267, 65);
+            this.TPVLbl.Location = new System.Drawing.Point(294, 65);
             this.TPVLbl.Name = "TPVLbl";
             this.TPVLbl.Size = new System.Drawing.Size(131, 19);
             this.TPVLbl.TabIndex = 1;
@@ -118,28 +122,28 @@
             this.TICKET_TABLE.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.TICKET_TABLE.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TICKET_TABLE.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.TICKET_TABLE.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.TICKET_TABLE.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.TICKET_TABLE.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(165)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.TICKET_TABLE.DefaultCellStyle = dataGridViewCellStyle4;
             this.TICKET_TABLE.Location = new System.Drawing.Point(15, 141);
             this.TICKET_TABLE.MultiSelect = false;
             this.TICKET_TABLE.Name = "TICKET_TABLE";
             this.TICKET_TABLE.RowHeadersVisible = false;
-            this.TICKET_TABLE.Size = new System.Drawing.Size(447, 455);
+            this.TICKET_TABLE.Size = new System.Drawing.Size(537, 455);
             this.TICKET_TABLE.TabIndex = 4;
             this.TICKET_TABLE.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TICKET_TABLE_CellContentClick);
             // 
@@ -147,7 +151,7 @@
             // 
             this.PURCHASE_Date.Font = new System.Drawing.Font("Century Gothic", 13F);
             this.PURCHASE_Date.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.PURCHASE_Date.Location = new System.Drawing.Point(783, 86);
+            this.PURCHASE_Date.Location = new System.Drawing.Point(769, 86);
             this.PURCHASE_Date.Name = "PURCHASE_Date";
             this.PURCHASE_Date.Size = new System.Drawing.Size(127, 29);
             this.PURCHASE_Date.TabIndex = 6;
@@ -156,26 +160,11 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(779, 65);
+            this.label1.Location = new System.Drawing.Point(765, 65);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(114, 19);
             this.label1.TabIndex = 1;
             this.label1.Text = "DATA DEL TICKET";
-            // 
-            // GOBtn
-            // 
-            this.GOBtn.BackgroundImage = global::Eines_ATT_Clients.Properties.Resources.icons8_google_web_search_50px;
-            this.GOBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.GOBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.GOBtn.FlatAppearance.BorderSize = 0;
-            this.GOBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
-            this.GOBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GOBtn.Location = new System.Drawing.Point(933, 73);
-            this.GOBtn.Name = "GOBtn";
-            this.GOBtn.Size = new System.Drawing.Size(56, 54);
-            this.GOBtn.TabIndex = 7;
-            this.GOBtn.UseVisualStyleBackColor = true;
-            this.GOBtn.Click += new System.EventHandler(this.GOBtn_Click);
             // 
             // errorlbl
             // 
@@ -187,6 +176,72 @@
             this.errorlbl.Size = new System.Drawing.Size(0, 15);
             this.errorlbl.TabIndex = 8;
             // 
+            // StartTimeTK
+            // 
+            this.StartTimeTK.Tick += new System.EventHandler(this.StartTimeTK_Tick);
+            // 
+            // CLIENT_CODE
+            // 
+            this.CLIENT_CODE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CLIENT_CODE.Location = new System.Drawing.Point(574, 87);
+            this.CLIENT_CODE.Name = "CLIENT_CODE";
+            this.CLIENT_CODE.Size = new System.Drawing.Size(164, 27);
+            this.CLIENT_CODE.TabIndex = 10;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(570, 65);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(168, 19);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "CODI CLIENT (opcional)";
+            // 
+            // Downloading
+            // 
+            this.Downloading.DoWork += new System.ComponentModel.DoWorkEventHandler(this.Downloading_DoWork);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(688, 125);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(395, 10);
+            this.progressBar1.Step = 1;
+            this.progressBar1.TabIndex = 11;
+            this.progressBar1.Visible = false;
+            // 
+            // Downloadlbl
+            // 
+            this.Downloadlbl.AutoSize = true;
+            this.Downloadlbl.Font = new System.Drawing.Font("Century Gothic", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Downloadlbl.Location = new System.Drawing.Point(571, 122);
+            this.Downloadlbl.Name = "Downloadlbl";
+            this.Downloadlbl.Size = new System.Drawing.Size(115, 16);
+            this.Downloadlbl.TabIndex = 12;
+            this.Downloadlbl.Text = "Descarregant caixa";
+            this.Downloadlbl.Visible = false;
+            // 
+            // Download_File
+            // 
+            this.Download_File.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.Download_File.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Download_File.FlatAppearance.BorderSize = 0;
+            this.Download_File.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.Download_File.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.Download_File.Font = new System.Drawing.Font("Century Gothic", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Download_File.Image = global::Eines_ATT_Clients.Properties.Resources.downloading_updates_64px1;
+            this.Download_File.Location = new System.Drawing.Point(1002, 59);
+            this.Download_File.Name = "Download_File";
+            this.Download_File.Size = new System.Drawing.Size(63, 74);
+            this.Download_File.TabIndex = 13;
+            this.Download_File.Text = "Descarregar";
+            this.Download_File.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.Download_File.UseVisualStyleBackColor = true;
+            this.Download_File.Click += new System.EventHandler(this.Download_File_Click);
+            // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -196,34 +251,30 @@
             this.button1.FlatAppearance.BorderSize = 0;
             this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.DarkRed;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(976, 0);
+            this.button1.Location = new System.Drawing.Point(1070, 0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(29, 28);
             this.button1.TabIndex = 9;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // StartTimeTK
+            // GOBtn
             // 
-            this.StartTimeTK.Tick += new System.EventHandler(this.StartTimeTK_Tick);
-            // 
-            // CLIENT_CODE
-            // 
-            this.CLIENT_CODE.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CLIENT_CODE.Location = new System.Drawing.Point(529, 87);
-            this.CLIENT_CODE.Name = "CLIENT_CODE";
-            this.CLIENT_CODE.Size = new System.Drawing.Size(220, 27);
-            this.CLIENT_CODE.TabIndex = 10;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(525, 65);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(168, 19);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "CODI CLIENT (opcional)";
+            this.GOBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.GOBtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GOBtn.FlatAppearance.BorderSize = 0;
+            this.GOBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
+            this.GOBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GOBtn.Font = new System.Drawing.Font("Century Gothic", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GOBtn.Image = global::Eines_ATT_Clients.Properties.Resources.icons8_google_web_search_50px;
+            this.GOBtn.Location = new System.Drawing.Point(916, 59);
+            this.GOBtn.Name = "GOBtn";
+            this.GOBtn.Size = new System.Drawing.Size(63, 74);
+            this.GOBtn.TabIndex = 7;
+            this.GOBtn.Text = "Cercar";
+            this.GOBtn.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.GOBtn.UseVisualStyleBackColor = true;
+            this.GOBtn.Click += new System.EventHandler(this.GOBtn_Click);
             // 
             // Tiquet
             // 
@@ -231,6 +282,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.Download_File);
+            this.Controls.Add(this.Downloadlbl);
             this.Controls.Add(this.CLIENT_CODE);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.errorlbl);
@@ -251,7 +305,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "Tiquet";
-            this.Size = new System.Drawing.Size(1004, 612);
+            this.Size = new System.Drawing.Size(1098, 612);
             ((System.ComponentModel.ISupportInitialize)(this.TICKET_TABLE)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -276,5 +330,9 @@
         private System.ComponentModel.IContainer components;
         private System.Windows.Forms.TextBox CLIENT_CODE;
         public System.Windows.Forms.Label label2;
+        private System.ComponentModel.BackgroundWorker Downloading;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label Downloadlbl;
+        public System.Windows.Forms.Button Download_File;
     }
 }
