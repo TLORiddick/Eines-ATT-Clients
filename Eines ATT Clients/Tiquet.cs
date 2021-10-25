@@ -120,17 +120,24 @@ namespace Eines_ATT_Clients
                     }
                     break;
                 case "98444":
-                        cajacorrecta = true;
-                    break;
                 case "104090":
-                    
-                        cajacorrecta = true;
-                    
+                case "1635":
+                case "103982":
+                case "95548":
+                case "104500":
+                case "103470":
+                case "105661":
+                case "54992":
+                case "78727":
+                case "105193":
+                case "103784":
+                case "100541":
+                case "91996":
+                case "88561":
+                    cajacorrecta = true;                    
                     break;
                 case "90875":
-                    
                         cajacorrecta = true;
-                    
                     break;
                 case "77585":
                     if (caja == "9" || caja == "14")
@@ -138,34 +145,11 @@ namespace Eines_ATT_Clients
                         cajacorrecta = true;
                     }
                     break;
-                case "1635":
-                   
-                        cajacorrecta = true;
-                    
-                    break;
                 case "100372":
                     if (caja == "18" || caja == "710" || caja == "65" || caja == "81")
                     {
                         cajacorrecta = true;
                     }
-                    break;
-                case "103982":
-                        cajacorrecta = true;
-                    
-                    break;
-                case "95548":
-                case "104500":
-                    cajacorrecta = true;
-                    break;
-                case "103470":
-                    
-                        cajacorrecta = true;
-                    
-                    break;
-                case "105661":
-                    
-                        cajacorrecta = true;
-                    
                     break;
                 case "93901":
                 case "100505":
@@ -174,43 +158,11 @@ namespace Eines_ATT_Clients
                         cajacorrecta = true;
                     }
                     break;
-                case "54992":
-                    
-                        cajacorrecta = true;
-                   
-                    break;
-                case "78727":
-                    
-                        cajacorrecta = true;
-                    
-                    break;
-                case "105193":
-                    
-                        cajacorrecta = true;
-                    
-                    break;
-                case "103784":
-                    
-                        cajacorrecta = true;
-                    break;
                 case "102920":
                     if (caja == "1" || caja == "3")
                     {
                         cajacorrecta = true;
                     }
-                    break;
-                case "100541":
-                    
-                        cajacorrecta = true;
-                    
-                    break;
-                case "91996":
-                    
-                        cajacorrecta = true;
-                    break;
-                case "88561":
-
-                    cajacorrecta = true;
                     break;
                 default:
                     break;
@@ -779,7 +731,7 @@ namespace Eines_ATT_Clients
                             {
                                 using (StreamWriter SW = File.AppendText(Path + @"\" + TPVBox.Text + ".txt"))
                                 {
-                                    SW.WriteLine(FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + FDL[4].ToString() + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString());
+                                    SW.WriteLine(FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + Convert.ToDateTime(FDL[4]).ToString("dd/MM/yyyy") + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString());
                                 }
                                 progressBar1.PerformStep();
                             }
