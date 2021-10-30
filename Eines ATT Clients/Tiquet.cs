@@ -164,6 +164,12 @@ namespace Eines_ATT_Clients
                         cajacorrecta = true;
                     }
                     break;
+                case "84638":
+                    if (caja == "25" || caja == "26" || caja == "27")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
                 default:
                     break;
             }
