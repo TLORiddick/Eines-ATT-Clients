@@ -57,7 +57,6 @@ namespace Eines_ATT_Clients
                     MySqlDataReader DPT = CMDs.ExecuteReader();
                     while (DPT.Read())
                     {
-
                         DPTBox.Items.Add(DPT[0].ToString().Trim());
                     }
                     DPT.Close();
@@ -119,6 +118,7 @@ namespace Eines_ATT_Clients
                         cajacorrecta = true;
                     }
                     break;
+                case "104250":
                 case "98444":
                 case "104090":
                 case "1635":
@@ -159,7 +159,7 @@ namespace Eines_ATT_Clients
                     }
                     break;
                 case "102920":
-                    if (caja == "1" || caja == "3")
+                    if (caja == "1" || caja == "2" || caja == "3")
                     {
                         cajacorrecta = true;
                     }
@@ -180,6 +180,8 @@ namespace Eines_ATT_Clients
 
             TPVBox.Items.Clear();
             MySqlConnection connection = new MySqlConnection(Connection());
+            connection.Close();
+            connection.Open();
             StringBuilder Command = new StringBuilder();
             Command.Append("SELECT TPV FROM `departaments-cca`.cca where DSC = '" + DPTBox.Text + "' order by DPT");
             MySqlCommand CMD = new MySqlCommand(Command.ToString(), connection);
@@ -193,7 +195,15 @@ namespace Eines_ATT_Clients
                 chkc = ncaja(Control_Screen.nuser, DPT[0].ToString().Trim());
                 if (chkc)
                 {
-                    string TPVResult = TPV(DPT[0].ToString().Trim());
+                    string TPVResult = string.Empty;
+                    if (Show_Grup.Checked)
+                    {
+                        TPVResult = TPV(DPT[0].ToString().Trim(), true);
+                    }
+                    else
+                    {
+                        TPVResult = TPV(DPT[0].ToString().Trim(), false);
+                    }
                     if (TPVResult != "")
                     {
                         foreach (string index in TPVBox.Items)
@@ -270,144 +280,286 @@ namespace Eines_ATT_Clients
                 string nreb = selectedRow.Cells[1].Value.ToString();
                 Check_Tiquet(nreb, nterm);
             }
-
         }
-        public string TPV(string NTPV)
+        public string TPV(string NTPV, bool Group)
         {
-            switch (NTPV)
+            if (Group)
             {
-                case "1":
-                case "3":
-                    NTPV = "CAIXES MULTIMEDIA";
-                    break;
-                case "2":
-                    NTPV = NTPV + " - FUJI";
-                    break;
-                case "9":
-                case "14":
-                    NTPV = "CAIXES JUGUETTOS/ABACUS";
-                    break;
-                case "15":
-                    NTPV = NTPV + " - TEXTURA";
-                    break;
-                case "18":
-                case "23":
-                    NTPV = NTPV + " - MUY MUCHO";
-                    break;
-                case "19":
-                    NTPV = NTPV + " - NAËLLE";
-                    break;
-                case "20":
-                case "21":
-                    NTPV = NTPV + " - MODA";
-                    break;
-                case "22":
-                    NTPV = NTPV + " - INFORMÀTICA";
-                    break;
-                case "24":
-                    NTPV = NTPV + " - TWINNER";
-                    break;
-                case "25":
-                case "26":
-                case "27":
-                    NTPV = NTPV + " - FLECA";
-                    break;
-                case "50":
-                case "51":
-                case "52":
-                case "53":
-                case "54":
-                case "55":
-                case "56":
-                case "57":
-                case "58":
-                case "59":
-                case "60":
-                case "62":
-                case "70":
-                case "71":
-                case "72":
-                    NTPV = "CAIXES ALIMENTACIÓ";
-                    break;
-                case "61":
-                    NTPV = NTPV + " - LA REAL";
-                    break;
-                case "201":
-                case "202":
-                case "203":
-                    NTPV = "CAIXES MR. BRICOLAGE";
-                    break;
-                case "301":
-                case "302":
-                case "303":
-                case "304":
-                    NTPV = "CAIXES UEXPRESS";
-                    break;
-                case "401":
-                case "402":
-                case "403":
-                case "404":
-                case "405":
-                case "406":
-                case "407":
-                case "408":
-                case "411":
-                case "412":
-                case "413":
-                case "414":
-                    NTPV = "CAIXES CAPRABO";
-                    break;
-                case "30":
-                    NTPV = NTPV + " - MELS";
-                    break;
-                case "11":
-                    NTPV = NTPV + " - BOB";
-                    break;
-                case "5":
-                case "6":
-                case "7":
-                    NTPV = "CAIXES DUTY FREE";
-                    break;
-                case "65":
-                case "81":
-                    NTPV = NTPV + " - NATTURALS";
-                    break;
-                case "63":
-                case "64":
-                case "66":
-                    NTPV = "CAIXES CAFETERIA";
-                    break;
-                case "13":
-                    NTPV = NTPV + " - PARFOIS";
-                    break;
-                case "12":
-                    NTPV = NTPV + " - YVES ROCHER";
-                    break;
-                case "40":
-                    NTPV = NTPV + " - FOM";
-                    break;
-                case "45":
-                    NTPV = NTPV + " - ULANKA";
-                    break;
-                case "501":
-                case "502":
-                case "503":
-                case "504":
-                    NTPV = "CAIXES FRESH";
-                    break;
-                case "601":
-                    NTPV = NTPV + " - PARFOIS II";
-                    break;
-                case "701":
-                    NTPV = NTPV + " - FOM II";
-                    break;
-                case "710":
-                    NTPV = NTPV + " - MUY MUCHO II";
-                    break;
-                default:
-                    NTPV = "";
-                    break;
+                switch (NTPV)
+                {
+                    case "1":
+                    case "3":
+                        NTPV = "CAIXES MULTIMEDIA";
+                        break;
+                    case "2":
+                        NTPV = NTPV + " - FUJI";
+                        break;
+                    case "9":
+                    case "14":
+                        NTPV = "CAIXES JUGUETTOS/ABACUS";
+                        break;
+                    case "15":
+                        NTPV = NTPV + " - TEXTURA";
+                        break;
+                    case "18":
+                    case "23":
+                        NTPV = NTPV + " - MUY MUCHO";
+                        break;
+                    case "19":
+                        NTPV = NTPV + " - NAËLLE";
+                        break;
+                    case "20":
+                    case "21":
+                        NTPV = NTPV + " - MODA";
+                        break;
+                    case "22":
+                        NTPV = NTPV + " - INFORMÀTICA";
+                        break;
+                    case "24":
+                        NTPV = NTPV + " - TWINNER";
+                        break;
+                    case "25":
+                    case "26":
+                    case "27":
+                        NTPV = NTPV + " - FLECA";
+                        break;
+                    case "50":
+                    case "51":
+                    case "52":
+                    case "53":
+                    case "54":
+                    case "55":
+                    case "56":
+                    case "57":
+                    case "58":
+                    case "59":
+                    case "60":
+                    case "62":
+                    case "70":
+                    case "71":
+                    case "72":
+                        NTPV = "CAIXES ALIMENTACIÓ";
+                        break;
+                    case "61":
+                        NTPV = NTPV + " - LA REAL";
+                        break;
+                    case "201":
+                    case "202":
+                    case "203":
+                        NTPV = "CAIXES MR. BRICOLAGE";
+                        break;
+                    case "301":
+                    case "302":
+                    case "303":
+                    case "304":
+                        NTPV = "CAIXES UEXPRESS";
+                        break;
+                    case "401":
+                    case "402":
+                    case "403":
+                    case "404":
+                    case "405":
+                    case "406":
+                    case "407":
+                    case "408":
+                    case "411":
+                    case "412":
+                    case "413":
+                    case "414":
+                        NTPV = "CAIXES CAPRABO";
+                        break;
+                    case "30":
+                        NTPV = NTPV + " - MELS";
+                        break;
+                    case "11":
+                        NTPV = NTPV + " - BOB";
+                        break;
+                    case "5":
+                    case "6":
+                    case "7":
+                        NTPV = "CAIXES DUTY FREE";
+                        break;
+                    case "65":
+                    case "81":
+                        NTPV = NTPV + " - NATTURALS";
+                        break;
+                    case "63":
+                    case "64":
+                    case "66":
+                        NTPV = "CAIXES CAFETERIA";
+                        break;
+                    case "13":
+                        NTPV = NTPV + " - PARFOIS";
+                        break;
+                    case "12":
+                        NTPV = NTPV + " - YVES ROCHER";
+                        break;
+                    case "40":
+                        NTPV = NTPV + " - FOM";
+                        break;
+                    case "45":
+                        NTPV = NTPV + " - ULANKA";
+                        break;
+                    case "501":
+                    case "502":
+                    case "503":
+                    case "504":
+                        NTPV = "CAIXES FRESH";
+                        break;
+                    case "601":
+                        NTPV = NTPV + " - PARFOIS II";
+                        break;
+                    case "701":
+                        NTPV = NTPV + " - FOM II";
+                        break;
+                    case "710":
+                        NTPV = NTPV + " - MUY MUCHO II";
+                        break;
+                    default:
+                        NTPV = "";
+                        break;
+                }
             }
+            else
+            {
+                switch (NTPV)
+                {
+                    case "1":
+                    case "3":
+                        NTPV = NTPV + " - MULTIMEDIA";
+                        break;
+                    case "2":
+                        NTPV = NTPV + " - FUJI";
+                        break;
+                    case "9":
+                        NTPV = NTPV + " - ABACUS";
+                        break;
+                    case "14":
+                        NTPV = NTPV + " - JUGUETTOS";
+                        break;
+                    case "15":
+                        NTPV = NTPV + " - TEXTURA";
+                        break;
+                    case "18":
+                    case "23":
+                        NTPV = NTPV + " - MUY MUCHO";
+                        break;
+                    case "19":
+                        NTPV = NTPV + " - NAËLLE";
+                        break;
+                    case "20":
+                    case "21":
+                        NTPV = NTPV + " - MODA";
+                        break;
+                    case "22":
+                        NTPV = NTPV + " - INFORMÀTICA";
+                        break;
+                    case "24":
+                        NTPV = NTPV + " - TWINNER";
+                        break;
+                    case "25":
+                    case "26":
+                    case "27":
+                        NTPV = NTPV + " - FLECA";
+                        break;
+                    case "50":
+                    case "51":
+                    case "52":
+                    case "53":
+                    case "54":
+                    case "55":
+                    case "56":
+                    case "57":
+                    case "58":
+                    case "59":
+                    case "60":
+                    case "62":
+                    case "70":
+                    case "71":
+                    case "72":
+                        NTPV = NTPV + " - ALIMENTACIÓ"; 
+                        break;
+                    case "61":
+                        NTPV = NTPV + " - LA REAL";
+                        break;
+                    case "201":
+                    case "202":
+                    case "203":
+                        NTPV = NTPV + " - MR. BRICOLAGE";
+                        break;
+                    case "301":
+                    case "302":
+                    case "303":
+                    case "304":
+                        NTPV = NTPV + " - UEXPRESS";
+                        break;
+                    case "401":
+                    case "402":
+                    case "403":
+                    case "404":
+                    case "405":
+                    case "406":
+                    case "407":
+                    case "408":
+                    case "411":
+                    case "412":
+                    case "413":
+                    case "414":
+                        NTPV = NTPV + " - CAPRABO";
+                        break;
+                    case "30":
+                        NTPV = NTPV + " - MELS";
+                        break;
+                    case "11":
+                        NTPV = NTPV + " - BOB";
+                        break;
+                    case "5":
+                    case "6":
+                    case "7":
+                        NTPV = NTPV + " - DUTY FREE";
+                        break;
+                    case "65":
+                    case "81":
+                        NTPV = NTPV + " - NATTURALS";
+                        break;
+                    case "63":
+                    case "64":
+                    case "66":
+                        NTPV = NTPV + " - CAFETERIA";
+                        break;
+                    case "13":
+                        NTPV = NTPV + " - PARFOIS";
+                        break;
+                    case "12":
+                        NTPV = NTPV + " - YVES ROCHER";
+                        break;
+                    case "40":
+                        NTPV = NTPV + " - FOM";
+                        break;
+                    case "45":
+                        NTPV = NTPV + " - ULANKA";
+                        break;
+                    case "501":
+                    case "502":
+                    case "503":
+                    case "504":
+                        NTPV = NTPV + " - FRESH";
+                        break;
+                    case "601":
+                        NTPV = NTPV + " - PARFOIS II";
+                        break;
+                    case "701":
+                        NTPV = NTPV + " - FOM II";
+                        break;
+                    case "710":
+                        NTPV = NTPV + " - MUY MUCHO II";
+                        break;
+                    default:
+                        NTPV = "";
+                        break;
+                }
+            }
+            
             return NTPV;
         }
         public void ONETPV(int[] number)
@@ -439,19 +591,25 @@ namespace Eines_ATT_Clients
                 }
                 MySqlConnection connectionTable = new MySqlConnection(ConnectionAXCAIXES());
                 StringBuilder CommandTable = new StringBuilder();
+                CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm");
                 if (n_caixes == 0)
                 {
                     if (CLIENT_CODE.Text == "")
-                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm = " + Group_num + " and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                        CommandTable.Append(" = " + Group_num);
                     else
-                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm = " + Group_num + " and cliente like @clientcode and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                        CommandTable.Append(" = " + Group_num + " and cliente like @clientcode");
                 }else
                 {
                     if (CLIENT_CODE.Text == "")
-                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm IN(" + Group_num + ") and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                        CommandTable.Append(" IN(" + Group_num + ")");
                     else
-                        CommandTable.Append("SELECT nterm, nreb, hora, typlin, total FROM datacap where fecha = @fecha and nterm IN(" + Group_num + ") and cliente like @clientcode and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
+                        CommandTable.Append(" IN(" + Group_num + ") and cliente like @clientcode");
                 }
+                if (In_Out.Checked)
+                {
+                    CommandTable.Append(" and typtra IN('ENT','REC')");
+                }
+                CommandTable.Append(" and typlin like 'FE%' order by tienda, nterm, nreb, nlinea");
 
                 MySqlCommand CMD = new MySqlCommand(CommandTable.ToString(), connectionTable);
                 //CMD.Parameters.Add("@nterm",MySqlDbType.VarChar);
@@ -549,6 +707,13 @@ namespace Eines_ATT_Clients
             catch (Exception)
             {
                 errorlbl.Text = "ERROR! Envieu un correu a Fran d'informatica";
+                cur_Y = errorlbl.Location.Y;
+                errorlbl.Location = new Point(errorlbl.Location.X, Location.Y - errorlbl.Height);
+                errorlbl.Visible = true;
+                errorlbl.ForeColor = Color.Red;
+                mov_Y = errorlbl.Location.Y;
+                Error_Timer.Interval = 1;
+                Error_Timer.Start();
             }
         }
         private void Check_Tiquet(string nreb, string nterm)
@@ -568,13 +733,13 @@ namespace Eines_ATT_Clients
             {
                 TICKETS_LIST.Text += FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + FDL[4].ToString() + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString() + "\r\n";
             }
-            errorlbl.Text = "";
+            //errorlbl.Text = "";
             CNNFDL.Close();
         }
         private void GOBtn_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            errorlbl.Text = "";
+            //errorlbl.Text = "";
             int[] TPV;
             try
             {
@@ -616,7 +781,14 @@ namespace Eines_ATT_Clients
             }
             catch (Exception)
             {
-                errorlbl.Text = "ERROR! Ha de seleccionar una data, el departament i la caixa";
+                errorlbl.Text = "Ha de seleccionar OBLIGATORIAMENT el departament, la caixa i la data";
+                cur_Y = errorlbl.Location.Y;
+                errorlbl.Location = new Point(errorlbl.Location.X, Location.Y - errorlbl.Height);
+                errorlbl.Visible = true;
+                errorlbl.ForeColor = Color.Red;
+                mov_Y = errorlbl.Location.Y;
+                Error_Timer.Interval = 1;
+                Error_Timer.Start();
             }
         }
         private void button1_Click(object sender, EventArgs e)
@@ -641,6 +813,8 @@ namespace Eines_ATT_Clients
 
         private void Download_File_Click(object sender, EventArgs e)
         {
+            Downloadlbl.Visible = true;
+            progressBar1.Visible = true;
             Downloading.RunWorkerAsync();
         }
 
@@ -648,122 +822,183 @@ namespace Eines_ATT_Clients
         {
             Invoke((MethodInvoker)delegate
             {
-                try
+                if (!(PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString()))
                 {
-                    FolderBrowserDialog ofd = new FolderBrowserDialog();
-                    int[] numero;
-                    if (ofd.ShowDialog() == DialogResult.OK)
+                    try
                     {
-                        Downloadlbl.Visible = true;
-                        progressBar1.Visible = true;
-                        progressBar1.Value = 1;
-                        progressBar1.Step = 1;
-                        switch (TPVBox.Text)
+                        FolderBrowserDialog ofd = new FolderBrowserDialog();
+                        int[] numero;
+                        if (ofd.ShowDialog() == DialogResult.OK)
                         {
-                            case "CAIXES MULTIMEDIA":
-                                numero = new int[] { 1, 3 };
-                                break;
-                            case "CAIXES JUGUETTOS/ABACUS":
-                                numero = new int[] { 9, 14 };
-                                break;
-                            case "CAIXES ALIMENTACIÓ":
-                                numero = new int[] { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 70, 71, 72 };
-                                break;
-                            case "CAIXES MR. BRICOLAGE":
-                                numero = new int[] { 201, 202, 203 };
-                                break;
-                            case "CAIXES UEXPRESS":
-                                numero = new int[] { 301, 302, 303, 304 };
-                                break;
-                            case "CAIXES CAPRABO":
-                                numero = new int[] { 401, 402, 403, 404, 405, 406, 407, 408, 411, 412, 413, 414 };
-                                break;
-                            case "CAIXES DUTY FREE":
-                                numero = new int[] { 5, 6, 7 };
-                                break;
-                            case "CAIXES CAFETERIA":
-                                numero = new int[] { 63, 64, 66 };
-                                break;
-                            case "CAIXES FRESH":
-                                numero = new int[] { 501, 502, 503, 504 };
-                                break;
-                            default:
-                                numero = new int[] { Convert.ToInt32(TPVBox.Text.Substring(0, TPVBox.Text.IndexOf("-") - 1).Trim()) };
-                                break;
-                        }
-                        string Path = ofd.SelectedPath;
-                        MySqlConnection CNNFDL = new MySqlConnection(ConnectionFDL());
-                        StringBuilder CommandFDL = new StringBuilder();
-                        int count_rows = 0;
-                        CNNFDL.Close();
-                        foreach (int nterm in numero)
-                        {
-                            CommandFDL = new StringBuilder();
-                            CommandFDL.Append("SELECT COUNT(*) FROM tickets where fecha = @fecha and nterm = @nterm order by nterm, nreb, nlinea");
-                            MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
-                            CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
-                            CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - nterm.ToString().Length) + nterm.ToString());
-                            CNNFDL.Close();
-                            CNNFDL.Open();
-                            MySqlDataReader FDL = CMDFDL.ExecuteReader();
-                            while (FDL.Read())
+                            progressBar1.Value = 1;
+                            progressBar1.Step = 1;
+                            switch (TPVBox.Text)
                             {
-                                count_rows += Convert.ToInt32(FDL[0]);
+                                case "CAIXES MULTIMEDIA":
+                                    numero = new int[] { 1, 3 };
+                                    break;
+                                case "CAIXES JUGUETTOS/ABACUS":
+                                    numero = new int[] { 9, 14 };
+                                    break;
+                                case "CAIXES ALIMENTACIÓ":
+                                    numero = new int[] { 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 62, 70, 71, 72 };
+                                    break;
+                                case "CAIXES MR. BRICOLAGE":
+                                    numero = new int[] { 201, 202, 203 };
+                                    break;
+                                case "CAIXES UEXPRESS":
+                                    numero = new int[] { 301, 302, 303, 304 };
+                                    break;
+                                case "CAIXES CAPRABO":
+                                    numero = new int[] { 401, 402, 403, 404, 405, 406, 407, 408, 411, 412, 413, 414 };
+                                    break;
+                                case "CAIXES DUTY FREE":
+                                    numero = new int[] { 5, 6, 7 };
+                                    break;
+                                case "CAIXES CAFETERIA":
+                                    numero = new int[] { 63, 64, 66 };
+                                    break;
+                                case "CAIXES FRESH":
+                                    numero = new int[] { 501, 502, 503, 504 };
+                                    break;
+                                default:
+                                    numero = new int[] { Convert.ToInt32(TPVBox.Text.Substring(0, TPVBox.Text.IndexOf("-") - 1).Trim()) };
+                                    break;
                             }
-                        }
-                        CNNFDL.Close();
-                        progressBar1.Maximum = count_rows;
-                        if (File.Exists(Path + @"\" + TPVBox.Text + ".txt"))
-                        {
-                            if (File.Exists(Path + @"\" + TPVBox.Text + ".txt.old"))
-                            {
-                                File.Delete(Path + @"\" + TPVBox.Text + ".txt.old");
-                            }
-                            File.Move(Path + @"\" + TPVBox.Text + ".txt", Path + @"\" + TPVBox.Text + ".txt.old");
-                        }
-                        foreach (int nterm in numero)
-                        {
-                            CommandFDL = new StringBuilder();
-                            CommandFDL.Append("SELECT * FROM tickets where fecha = @fecha and nterm = @nterm order by nterm, nreb, nlinea");
-                            MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
-                            CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
-                            CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - nterm.ToString().Length) + nterm.ToString());
+                            string Path = ofd.SelectedPath;
+                            MySqlConnection CNNFDL = new MySqlConnection(ConnectionFDL());
+                            StringBuilder CommandFDL = new StringBuilder();
+                            int count_rows = 0;
                             CNNFDL.Close();
-                            CNNFDL.Open();
-                            //TICKETS_LIST.Text = string.Empty;
-                            MySqlDataReader FDL = CMDFDL.ExecuteReader();
-                            //int count_rows = Convert.ToInt32(CMDFDL.ExecuteScalar());
-                            while (FDL.Read())
+                            foreach (int nterm in numero)
                             {
-                                using (StreamWriter SW = File.AppendText(Path + @"\" + TPVBox.Text + ".txt"))
+                                CommandFDL = new StringBuilder();
+                                CommandFDL.Append("SELECT COUNT(*) FROM tickets where fecha = @fecha and nterm = @nterm order by nterm, nreb, nlinea");
+                                MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
+                                CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                                CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - nterm.ToString().Length) + nterm.ToString());
+                                CNNFDL.Close();
+                                CNNFDL.Open();
+                                MySqlDataReader FDL = CMDFDL.ExecuteReader();
+                                while (FDL.Read())
                                 {
-                                    SW.WriteLine(FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + Convert.ToDateTime(FDL[4]).ToString("dd/MM/yyyy") + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString());
+                                    count_rows += Convert.ToInt32(FDL[0]);
                                 }
-                                progressBar1.PerformStep();
                             }
-                            //errorlbl.Text = "";
+                            CNNFDL.Close();
+                            progressBar1.Maximum = count_rows;
+                            if (File.Exists(Path + @"\" + TPVBox.Text + ".txt"))
+                            {
+                                if (File.Exists(Path + @"\" + TPVBox.Text + ".txt.old"))
+                                {
+                                    File.Delete(Path + @"\" + TPVBox.Text + ".txt.old");
+                                }
+                                File.Move(Path + @"\" + TPVBox.Text + ".txt", Path + @"\" + TPVBox.Text + ".txt.old");
+                            }
+                            foreach (int nterm in numero)
+                            {
+                                CommandFDL = new StringBuilder();
+                                CommandFDL.Append("SELECT * FROM tickets where fecha = @fecha and nterm = @nterm order by nterm, nreb, nlinea");
+                                MySqlCommand CMDFDL = new MySqlCommand(CommandFDL.ToString(), CNNFDL);
+                                CMDFDL.Parameters.AddWithValue("@fecha", Convert.ToDateTime(PURCHASE_Date.Text).ToString("yyyyMMdd"));
+                                CMDFDL.Parameters.AddWithValue("@nterm", new string('0', 4 - nterm.ToString().Length) + nterm.ToString());
+                                CNNFDL.Close();
+                                CNNFDL.Open();
+                                //TICKETS_LIST.Text = string.Empty;
+                                MySqlDataReader FDL = CMDFDL.ExecuteReader();
+                                //int count_rows = Convert.ToInt32(CMDFDL.ExecuteScalar());
+                                while (FDL.Read())
+                                {
+                                    using (StreamWriter SW = File.AppendText(Path + @"\" + TPVBox.Text + ".txt"))
+                                    {
+                                        SW.WriteLine(FDL[0].ToString() + "\t" + FDL[1].ToString() + "\t" + FDL[2].ToString() + "\t" + FDL[3].ToString() + "\t" + Convert.ToDateTime(FDL[4]).ToString("dd/MM/yyyy") + "\t" + FDL[5].ToString() + "\t" + FDL[6].ToString());
+                                    }
+                                    progressBar1.PerformStep();
+                                }
+                                //errorlbl.Text = "";
+                            }
+                            CNNFDL.Close();
+                            errorlbl.Text = "Descarrega Completada";
+                            cur_Y = errorlbl.Location.Y;
+                            errorlbl.Location = new Point(errorlbl.Location.X, Location.Y - errorlbl.Height);
+                            errorlbl.Visible = true;
+                            errorlbl.ForeColor = Color.Green;
+                            mov_Y = errorlbl.Location.Y;
+                            Error_Timer.Interval = 1;
+                            Error_Timer.Start();
+                            //MessageBox.Show("Descarrega Completada", "Completat", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            Downloadlbl.Visible = false;
+                            progressBar1.Visible = false;
+                            Process.Start("explorer.exe", Path);
                         }
-                        CNNFDL.Close();
-                        MessageBox.Show("Descarrega Completada", "Completat", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Downloadlbl.Visible = false;
-                        progressBar1.Visible = false;
-                        Process.Start("explorer.exe", Path);
+                        else
+                        {
+                            Downloadlbl.Visible = false;
+                            progressBar1.Visible = false;
+                            errorlbl.Text = "Descarrega cancel·lada";
+                            cur_Y = errorlbl.Location.Y;
+                            errorlbl.Location = new Point(errorlbl.Location.X, Location.Y - errorlbl.Height);
+                            errorlbl.Visible = true;
+                            errorlbl.ForeColor = Color.Red;
+                            mov_Y = errorlbl.Location.Y;
+                            Error_Timer.Interval = 1;
+                            Error_Timer.Start();
+                            //MessageBox.Show("");
+                            return;
+                        }
                     }
-                    else
+                    catch
                     {
                         Downloadlbl.Visible = false;
                         progressBar1.Visible = false;
-                        MessageBox.Show("Descarrega cancel·lada");
-                        return;
+                        errorlbl.Text = "Ha de seleccionar OBLIGATORIAMENT el departament, la caixa i la data";
+                        cur_Y = errorlbl.Location.Y;
+                        errorlbl.Location = new Point(errorlbl.Location.X, Location.Y - errorlbl.Height);
+                        errorlbl.Visible = true;
+                        errorlbl.ForeColor = Color.Red;
+                        mov_Y = errorlbl.Location.Y;
+                        Error_Timer.Interval = 1;
+                        Error_Timer.Start();
+                        //MessageBox.Show("Empleni els camps obligatoris", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                catch
+                else
                 {
-                    Downloadlbl.Visible = false;
-                    progressBar1.Visible = false;
-                    MessageBox.Show("Empleni els camps obligatoris", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    errorlbl.Text = "No es pot descarregar el diari d'avui";
+                    cur_Y = errorlbl.Location.Y;
+                    errorlbl.Location = new Point(errorlbl.Location.X, Location.Y - errorlbl.Height);
+                    errorlbl.Visible = true;
+                    errorlbl.ForeColor = Color.Red;
+                    mov_Y = errorlbl.Location.Y;
+                    Error_Timer.Interval = 1;
+                    Error_Timer.Start();
+                    //MessageBox.Show("No es pot descarregar el diari d'avui", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             });
+        }
+
+        private void Show_Grup_CheckedChanged(object sender, EventArgs e)
+        {
+            if (DPTBox.Text != "")
+            {
+                DPTBox_SelectedIndexChanged(sender, e);
+            }
+        }
+        public int mov_Y;
+        public int cur_Y;
+        private void Error_Timer_Tick(object sender, EventArgs e)
+        {
+            errorlbl.Location = new Point(errorlbl.Location.X, mov_Y++);
+            if (Error_Timer.Interval == 5000)
+            {
+                errorlbl.Visible = false;
+                Error_Timer.Stop();
+            }
+            if (mov_Y >= cur_Y)
+            {
+                errorlbl.Location = new Point(errorlbl.Location.X, cur_Y);
+                Error_Timer.Interval = 5000;
+            }
         }
     }
 }
