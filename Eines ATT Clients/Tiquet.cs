@@ -642,10 +642,23 @@ namespace Eines_ATT_Clients
                 connectionTable.Close();
                 TICKET_TABLE.DataSource = dataTable;
                 TICKET_TABLE.Font = new Font("Century Gothic", 10F);
-                TICKET_TABLE.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                TICKET_TABLE.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                TICKET_TABLE.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                TICKET_TABLE.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                DataGridViewCellStyle DGVCS = new DataGridViewCellStyle();
+                DGVCS.Font = new Font("Century Gothic", 8F);
+                DGVCS.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                TICKET_TABLE.Columns[0].HeaderCell.Style = DGVCS;
+                TICKET_TABLE.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                TICKET_TABLE.Columns[1].HeaderCell.Style = DGVCS;
+                TICKET_TABLE.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                TICKET_TABLE.Columns[2].HeaderCell.Style = DGVCS;
+                TICKET_TABLE.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                TICKET_TABLE.Columns[3].HeaderCell.Style = DGVCS;
+                TICKET_TABLE.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                TICKET_TABLE.Columns[4].HeaderCell.Style = DGVCS;
+                TICKET_TABLE.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                TICKET_TABLE.AutoSize = true;
+                TICKET_TABLE.Width = TICKET_TABLE.Columns[0].Width + TICKET_TABLE.Columns[1].Width + TICKET_TABLE.Columns[2].Width + TICKET_TABLE.Columns[3].Width + TICKET_TABLE.Columns[4].Width;
+                TICKETS_LIST.Location = new Point(TICKET_TABLE.Location.X + TICKET_TABLE.Width + 22, TICKETS_LIST.Location.Y);
+                TICKETS_LIST.Width = Width - TICKET_TABLE.Location.X - TICKET_TABLE.Width - 22 - TICKET_TABLE.Location.X;
                 Group_num = string.Empty;
                 n_caixes = 0;
                 foreach (int Num in number)
