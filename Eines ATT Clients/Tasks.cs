@@ -62,11 +62,11 @@ namespace Eines_ATT_Clients
         }
         public string Connection()
         {
-            server = "192.168.29.11";
-            uid = "CCA";
-            password = "Attclients02";
+            server = "192.168.29.80";
+            uid = "aval";
+            password = "Aval2019$";
             string connectionString;
-            return connectionString = "SERVER=" + server + ";" + "user id=" + uid + ";" + "PASSWORD=" + password + ";";
+            return connectionString = "server=" + server + ";" + "Uid=" + uid + ";" + "Pwd=" + password + ";";
         }
         private void Accept_Click(object sender, EventArgs e)
         {
@@ -122,7 +122,7 @@ namespace Eines_ATT_Clients
                     ErrorLOGIN.Text = "Usuari no trobat";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 nuser = string.Empty;
                 ErrorLOGIN.Text = "Usuari no trobat";

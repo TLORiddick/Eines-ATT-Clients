@@ -44,18 +44,18 @@ namespace Eines_ATT_Clients
         private string password;
         public string ConnectionIP()
         {
-            server = "192.168.29.11";
-            uid = "CCA";
-            password = "Attclients02";
+            server = "192.168.29.80";
+            uid = "aval";
+            password = "Aval2019$";
             string connectionString;
-            return connectionString = "SERVER=" + server + ";" + "user id=" + uid + ";" + "PASSWORD=" + password + ";";
+            return connectionString = "SERVER=" + server + ";" + "Uid=" + uid + ";" + "Pwd=" + password + ";";
         }
         public string Connection()
         {
-            string connectionString = "datasource=srvfidelia;port=3306;username=root;password=gnxpos;database=stocks;";
+            string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=Stocks;";
             if (VOUCHER_Dates.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
-                connectionString = "datasource=srvpos;port=3306;username=root;password=gnxpos;database=stocks;";
+                connectionString = "server=srvpos;Uid=root;Pwd=gnxpos;database=Stocks;";
             }
 
             return connectionString;

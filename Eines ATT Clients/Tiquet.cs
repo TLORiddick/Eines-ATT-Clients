@@ -72,23 +72,24 @@ namespace Eines_ATT_Clients
 
         public string Connection()
         {
-            server = "192.168.29.11";
-            uid = "CCA";
-            password = "Attclients02";
-            string connectionString = "SERVER=" + server + ";" + "user id=" + uid + ";" + "PASSWORD=" + password + ";";
+            server = "192.168.29.80";
+            uid = "aval";
+            password = "Aval2019$";
+            string connectionString = "server=" + server + ";" + "Uid=" + uid + ";" + "Pwd=" + password + ";";
             return connectionString;
         }
         public string ConnectionFDL()
         {
-            string connectionString = "datasource=srvfidelia;port=3306;username=root;password=gnxpos;database=journal;";
+            string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=journal;";
             return connectionString;
         }
         public string ConnectionAXCAIXES()
         {
-            string connectionString = "datasource=srvfidelia;port=3306;username=root;password=gnxpos;database=stocks;";
+            //connectionString = "server=" + server + ";" + "Uid=" + uid + ";" + "Pwd=" + password + ";";
+            string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=Stocks;";
             if (PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
-                connectionString = "datasource=srvpos;port=3306;username=root;password=gnxpos;database=stocks;";
+                connectionString = "server=srvpos;Uid=root;Pwd=gnxpos;database=Stocks;";
             }
 
             return connectionString;
@@ -119,6 +120,10 @@ namespace Eines_ATT_Clients
                     }
                     break;
                 case "104250":
+                case "105022":
+                case "104777":
+                case "103600":
+                case "104940":
                 case "98444":
                 case "104090":
                 case "1635":
@@ -377,6 +382,7 @@ namespace Eines_ATT_Clients
                     case "5":
                     case "6":
                     case "7":
+                    case "8":
                         NTPV = "CAIXES DUTY FREE";
                         break;
                     case "65":
@@ -516,6 +522,7 @@ namespace Eines_ATT_Clients
                     case "5":
                     case "6":
                     case "7":
+                    case "8":
                         NTPV = NTPV + " - DUTY FREE";
                         break;
                     case "65":
