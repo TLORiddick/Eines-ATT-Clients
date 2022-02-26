@@ -55,7 +55,7 @@ namespace Eines_ATT_Clients
             string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=Stocks;";
             if (VOUCHER_Dates.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
-                connectionString = "server=serverpos;Uid=root;Pwd=gnxpos;database=stocks;";
+                connectionString = "server=serverpos;Uid=root;Pwd=gnxpos;database=stocks;port=3307;";
             }
 
             return connectionString;

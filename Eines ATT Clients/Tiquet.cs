@@ -86,10 +86,10 @@ namespace Eines_ATT_Clients
         public string ConnectionAXCAIXES()
         {
             //connectionString = "server=" + server + ";" + "Uid=" + uid + ";" + "Pwd=" + password + ";";
-            string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=Stocks;";
+            string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=stocks;";
             if (PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
-                connectionString = "server=serverpos;Uid=root;Pwd=gnxpos;database=stocks;";
+                connectionString = "server=serverpos;Uid=root;Pwd=gnxpos;database=stocks;port=3307;";
             }
 
             return connectionString;
