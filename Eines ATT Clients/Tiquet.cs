@@ -89,7 +89,7 @@ namespace Eines_ATT_Clients
             string connectionString = "server=srvfidelia;Uid=root;Pwd=gnxpos;database=Stocks;";
             if (PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
             {
-                connectionString = "server=srvpos;Uid=root;Pwd=gnxpos;database=Stocks;";
+                connectionString = "server=serverpos;Uid=root;Pwd=gnxpos;database=stocks;";
             }
 
             return connectionString;
@@ -118,28 +118,28 @@ namespace Eines_ATT_Clients
                     {
                         cajacorrecta = true;
                     }
-                    break;
-                case "104250":
-                case "105022":
-                case "104777":
-                case "103600":
-                case "104940":
-                case "98444":
-                case "104090":
-                case "1635":
-                case "103982":
-                case "95548":
-                case "104500":
-                case "103470":
-                case "105661":
-                case "54992":
-                case "78727":
-                case "105193":
-                case "103784":
-                case "100541":
-                case "91996":
-                case "88561":
-                    cajacorrecta = true;                    
+                //    break;
+                //case "104250":
+                //case "105022":
+                //case "104777":
+                //case "103600":
+                //case "104940":
+                //case "98444":
+                //case "104090":
+                //case "1635":
+                //case "103982":
+                //case "95548":
+                //case "104500":
+                //case "103470":
+                //case "105661":
+                //case "54992":
+                //case "78727":
+                //case "105193":
+                //case "103784":
+                //case "100541":
+                //case "91996":
+                //case "88561":
+                                        
                     break;
                 case "90875":
                         cajacorrecta = true;
@@ -152,6 +152,12 @@ namespace Eines_ATT_Clients
                     break;
                 case "100372":
                     if (caja == "18" || caja == "710" || caja == "65" || caja == "81")
+                    {
+                        cajacorrecta = true;
+                    }
+                    break;
+                case "62081":
+                    if (caja == "50" || caja == "51" || caja == "52" || caja == "53" || caja == "54" || caja == "55" || caja == "56" || caja == "57" || caja == "58" || caja == "59" || caja == "60" || caja == "61" || caja == "62" || caja == "71" || caja == "72" || caja == "70")
                     {
                         cajacorrecta = true;
                     }
@@ -176,6 +182,7 @@ namespace Eines_ATT_Clients
                     }
                     break;
                 default:
+                    cajacorrecta = true;
                     break;
             }
             return cajacorrecta;
@@ -188,7 +195,7 @@ namespace Eines_ATT_Clients
             connection.Close();
             connection.Open();
             StringBuilder Command = new StringBuilder();
-            Command.Append("SELECT TPV FROM `departaments-cca`.cca where DSC = '" + DPTBox.Text + "' order by DPT");
+            Command.Append("SELECT TPV FROM `departaments-cca`.cca where DSC = '" + DPTBox.Text + "' order by DPT, TPV");
             MySqlCommand CMD = new MySqlCommand(Command.ToString(), connection);
             connection.Close();
             connection.Open();
@@ -698,7 +705,7 @@ namespace Eines_ATT_Clients
 
                     if (PURCHASE_Date.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
                     {
-                        FileIP.Add(@"\\srvpos\GEINSA\GnxServer\" + IP[1].ToString().Trim() + @"\");
+                        FileIP.Add(@"\\serverpos\GEINSA\GnxServer\" + IP[1].ToString().Trim() + @"\");
                     }
                 }
                 if (FileIP.Count == 0) { goto siguiente; }
