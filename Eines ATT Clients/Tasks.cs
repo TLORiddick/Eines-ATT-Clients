@@ -1,4 +1,4 @@
-﻿using MySql.Data.MySqlClient;
+﻿using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,20 +10,18 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.Configuration;
 
 namespace Eines_ATT_Clients
 {
     public partial class Control_Screen : Form
     {
+        private IConfiguration config = new ConfigurationBuilder().AddJsonFile(@"appsettings.json", false, true).Build();
         public Button TICKET
         {
             get { return TIQUETBtn; }
         }
-        public static string GETUSER
-        {
-            get;
-            set;
-        }
+        public static string GETUSER { get; set; }
         public Control_Screen()
         {
             InitializeComponent();
@@ -51,22 +49,46 @@ namespace Eines_ATT_Clients
         {
             WindowState = FormWindowState.Minimized;
         }
-        private string server;
-        private string uid;
-        private string password;
         public string Paper;
-        public static string nuser 
-        {
-            get;
-            set;
-        }
+        public static string nuser { get; set; }
         public string Connection()
         {
-            server = "192.168.29.80";
-            uid = "aval";
-            password = "Aval2019$";
-            string connectionString;
-            return connectionString = "server=" + server + ";" + "Uid=" + uid + ";" + "Pwd=" + password + ";";
+            return $"server={config["SQLParameters:server"]};Uid={config["SQLParameters:uid"]};Pwd={config["SQLParameters:pwd"]};database={config["SQLParameters:dtbs:dpt"]}";
+        }
+        private bool FindUser(string userPWD)
+        {
+            using (MySqlConnection connection = new MySqlConnection(Connection()))
+            {
+                connection.Open();
+                try
+                {
+                    StringBuilder Command = new StringBuilder();
+                    Command.Append("SELECT Empleado FROM `departaments-cca`.allowed where ID = @ID;");
+                    MySqlCommand CMD = new MySqlCommand(Command.ToString(), connection);
+                    CMD.Parameters.AddWithValue("@ID", LOGINTXT.Text);
+                    MySqlDataReader USER = CMD.ExecuteReader();
+                    if (USER.HasRows)
+                    {
+                        while (USER.Read())
+                        {
+                            USERLbl.Text = USER[0].ToString();
+                            GETUSER = USERLbl.Text;
+                            break;
+                        }
+                    }
+                    else return false;
+                    return true;
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("Error al connectar amb la base de dades: " + ex.Message, "Error de connexió", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
         }
         private void Accept_Click(object sender, EventArgs e)
         {
@@ -74,55 +96,26 @@ namespace Eines_ATT_Clients
             ErrorLOGIN.Text = "";
             try
             {
-                MySqlConnection connection = new MySqlConnection(Connection());
-                StringBuilder Command = new StringBuilder();
-                Command.Append("SELECT Empleado FROM `departaments-cca`.allowed where ID = '" + LOGINTXT.Text + "';");
-                MySqlCommand CMD = new MySqlCommand(Command.ToString(), connection);
-                connection.Close();
-                connection.Open();
-                MySqlDataReader USER = CMD.ExecuteReader();
-                while (USER.Read())
+                if (!FindUser(LOGINTXT.Text))
                 {
-                    USERLbl.Text = USER[0].ToString();
-                    GETUSER = USERLbl.Text;
+                    ErrorLOGIN.Text = "Usuari no trobat";
+                    return;
                 }
-                if (USERLbl.Text != "UserName")
+                Control Ctrl = null;
+                if (Paper == "Voucher")
                 {
-                    if (Paper == "Voucher")
-                    {
-                        Voucher TK = new Voucher();
-                        AcceptLOGIN.Visible = false;
-                        LOGIN.Visible = false;
-                        LOGINTXT.Visible = false;
-                        LOGO.Visible = false;
-                        MiddlePanel.Controls.Add(TK);
-                        TK.Dock = DockStyle.Fill;
-                        StartTime.Interval = 1;
-                        StartTime.Start();
-                        TK.Show();
-                        CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px_1;
-                    }
-                    else
-                    {
-                        Tiquet TK = new Tiquet();
-                        AcceptLOGIN.Visible = false;
-                        LOGIN.Visible = false;
-                        LOGINTXT.Visible = false;
-                        LOGO.Visible = false;
-                        MiddlePanel.Controls.Add(TK);
-                        TK.Dock = DockStyle.Fill;
-                        StartTime.Interval = 1;
-                        StartTime.Start();
-                        TK.Show();
-                        TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px_1;
-                    }
+                    Ctrl = new Voucher(config);
+                    CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px_1;
                 }
                 else
                 {
-                    ErrorLOGIN.Text = "Usuari no trobat";
+                    Ctrl = new Tiquet(config);
+                    TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px_1;
                 }
+                LOGINStatus(Paper, false);
+                OpenUserControl(Ctrl);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 nuser = string.Empty;
                 ErrorLOGIN.Text = "Usuari no trobat";
@@ -133,22 +126,11 @@ namespace Eines_ATT_Clients
             CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px;
             if (USERLbl.Text == "UserName")
             {
-                Paper = "Tiquet";
-                AcceptLOGIN.Visible = true;
-                LOGIN.Visible = true;
-                LOGINTXT.Visible = true;
-                LOGO.Visible = true;
-                LOGINTXT.Focus();
+                LOGINStatus("Tiquet", true);
             }
             else
             {
-                MiddlePanel.Controls.Clear();
-                Tiquet TK = new Tiquet();
-                MiddlePanel.Controls.Add(TK);
-                TK.Dock = DockStyle.Fill;
-                StartTime.Interval = 1;
-                StartTime.Start();
-                TK.Show();
+                OpenUserControl(new Tiquet(config));
                 TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px_1;
             }
 
@@ -162,7 +144,6 @@ namespace Eines_ATT_Clients
         }
         private void StartTime_Tick(object sender, EventArgs e)
         {
-
             LEFTBar.Size = new Size(LEFTBar.Width - 20, LEFTBar.Height);
             if (LEFTBar.Width <= 55)
             {
@@ -170,27 +151,37 @@ namespace Eines_ATT_Clients
                 StartTime.Stop();
             }
         }
+        private void LOGINStatus(string paper, bool condition)
+        {
+            Paper = paper;
+            AcceptLOGIN.Visible = condition;
+            LOGIN.Visible = condition;
+            LOGINTXT.Visible = condition;
+            LOGO.Visible = condition;
+            if (condition)
+            {
+                LOGINTXT.Focus();
+            }
+        }
+        private void OpenUserControl(Control ctrl)
+        {
+            MiddlePanel.Controls.Clear();
+            MiddlePanel.Controls.Add(ctrl);
+            ctrl.Dock = DockStyle.Fill;
+            StartTime.Interval = 1;
+            StartTime.Start();
+            ctrl.Show();
+        }
         private void CUPONESBtn_Click(object sender, EventArgs e)
         {
             TIQUETBtn.Image = Properties.Resources.icons8_purchase_order_50px;
             if (USERLbl.Text == "UserName")
             {
-                Paper = "Voucher";
-                AcceptLOGIN.Visible = true;
-                LOGIN.Visible = true;
-                LOGINTXT.Visible = true;
-                LOGO.Visible = true;
-                LOGINTXT.Focus();
+                LOGINStatus("Voucher", true);
             }
             else
             {
-                MiddlePanel.Controls.Clear();
-                Voucher VC = new Voucher();
-                MiddlePanel.Controls.Add(VC);
-                VC.Dock = DockStyle.Fill;
-                StartTime.Interval = 1;
-                StartTime.Start();
-                VC.Show();
+                OpenUserControl(new Voucher(config));
                 CUPONESBtn.Image = Properties.Resources.icons8_voucher_50px_1;
             }
         }

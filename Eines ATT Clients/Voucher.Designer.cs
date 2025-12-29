@@ -40,6 +40,8 @@
             this.VoucherSerchedTxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ExistServerPosLbl = new System.Windows.Forms.Label();
+            this.ExistServerPosTxt = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.Voucher_Table = new System.Windows.Forms.DataGridView();
             this.EXPIRATIONLbl = new System.Windows.Forms.Label();
@@ -67,7 +69,7 @@
             this.TITLETiquet.Font = new System.Drawing.Font("Century Gothic", 20.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TITLETiquet.Location = new System.Drawing.Point(9, 10);
             this.TITLETiquet.Name = "TITLETiquet";
-            this.TITLETiquet.Size = new System.Drawing.Size(208, 32);
+            this.TITLETiquet.Size = new System.Drawing.Size(207, 32);
             this.TITLETiquet.TabIndex = 3;
             this.TITLETiquet.Text = "CERCAR CUPÓ";
             // 
@@ -136,6 +138,8 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.ExistServerPosLbl);
+            this.groupBox1.Controls.Add(this.ExistServerPosTxt);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.Voucher_Table);
             this.groupBox1.Controls.Add(this.EXPIRATIONLbl);
@@ -155,6 +159,24 @@
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "INFORMACIÓ DEL CUPÓ";
+            // 
+            // ExistServerPosLbl
+            // 
+            this.ExistServerPosLbl.AutoSize = true;
+            this.ExistServerPosLbl.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExistServerPosLbl.Location = new System.Drawing.Point(6, 380);
+            this.ExistServerPosLbl.Name = "ExistServerPosLbl";
+            this.ExistServerPosLbl.Size = new System.Drawing.Size(154, 19);
+            this.ExistServerPosLbl.TabIndex = 21;
+            this.ExistServerPosLbl.Text = "EXISTENT AL SERVIDOR";
+            // 
+            // ExistServerPosTxt
+            // 
+            this.ExistServerPosTxt.Location = new System.Drawing.Point(6, 402);
+            this.ExistServerPosTxt.Name = "ExistServerPosTxt";
+            this.ExistServerPosTxt.ReadOnly = true;
+            this.ExistServerPosTxt.Size = new System.Drawing.Size(284, 27);
+            this.ExistServerPosTxt.TabIndex = 20;
             // 
             // label4
             // 
@@ -206,12 +228,13 @@
             this.Voucher_Table.RowHeadersVisible = false;
             this.Voucher_Table.Size = new System.Drawing.Size(303, 402);
             this.Voucher_Table.TabIndex = 18;
+            this.Voucher_Table.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GetTicket);
             // 
             // EXPIRATIONLbl
             // 
             this.EXPIRATIONLbl.AutoSize = true;
             this.EXPIRATIONLbl.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.EXPIRATIONLbl.Location = new System.Drawing.Point(6, 305);
+            this.EXPIRATIONLbl.Location = new System.Drawing.Point(6, 313);
             this.EXPIRATIONLbl.Name = "EXPIRATIONLbl";
             this.EXPIRATIONLbl.Size = new System.Drawing.Size(153, 19);
             this.EXPIRATIONLbl.TabIndex = 17;
@@ -219,7 +242,7 @@
             // 
             // ExpirationTxt
             // 
-            this.ExpirationTxt.Location = new System.Drawing.Point(6, 327);
+            this.ExpirationTxt.Location = new System.Drawing.Point(6, 335);
             this.ExpirationTxt.Name = "ExpirationTxt";
             this.ExpirationTxt.ReadOnly = true;
             this.ExpirationTxt.Size = new System.Drawing.Size(284, 27);
@@ -229,7 +252,7 @@
             // 
             this.StateVoucherLbl.AutoSize = true;
             this.StateVoucherLbl.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StateVoucherLbl.Location = new System.Drawing.Point(6, 240);
+            this.StateVoucherLbl.Location = new System.Drawing.Point(6, 246);
             this.StateVoucherLbl.Name = "StateVoucherLbl";
             this.StateVoucherLbl.Size = new System.Drawing.Size(115, 19);
             this.StateVoucherLbl.TabIndex = 17;
@@ -238,7 +261,7 @@
             // StateVoucherTxt
             // 
             this.StateVoucherTxt.ForeColor = System.Drawing.Color.Red;
-            this.StateVoucherTxt.Location = new System.Drawing.Point(6, 262);
+            this.StateVoucherTxt.Location = new System.Drawing.Point(6, 268);
             this.StateVoucherTxt.Name = "StateVoucherTxt";
             this.StateVoucherTxt.ReadOnly = true;
             this.StateVoucherTxt.Size = new System.Drawing.Size(284, 27);
@@ -248,7 +271,7 @@
             // 
             this.VoucherAmountLbl.AutoSize = true;
             this.VoucherAmountLbl.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VoucherAmountLbl.Location = new System.Drawing.Point(6, 175);
+            this.VoucherAmountLbl.Location = new System.Drawing.Point(6, 179);
             this.VoucherAmountLbl.Name = "VoucherAmountLbl";
             this.VoucherAmountLbl.Size = new System.Drawing.Size(126, 19);
             this.VoucherAmountLbl.TabIndex = 17;
@@ -256,7 +279,7 @@
             // 
             // VoucherAmountTxt
             // 
-            this.VoucherAmountTxt.Location = new System.Drawing.Point(6, 197);
+            this.VoucherAmountTxt.Location = new System.Drawing.Point(6, 201);
             this.VoucherAmountTxt.Name = "VoucherAmountTxt";
             this.VoucherAmountTxt.ReadOnly = true;
             this.VoucherAmountTxt.Size = new System.Drawing.Size(284, 27);
@@ -266,7 +289,7 @@
             // 
             this.ClientLbl.AutoSize = true;
             this.ClientLbl.Font = new System.Drawing.Font("Century Gothic", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClientLbl.Location = new System.Drawing.Point(6, 110);
+            this.ClientLbl.Location = new System.Drawing.Point(6, 112);
             this.ClientLbl.Name = "ClientLbl";
             this.ClientLbl.Size = new System.Drawing.Size(244, 19);
             this.ClientLbl.TabIndex = 17;
@@ -274,7 +297,7 @@
             // 
             // ClientTxt
             // 
-            this.ClientTxt.Location = new System.Drawing.Point(6, 132);
+            this.ClientTxt.Location = new System.Drawing.Point(6, 134);
             this.ClientTxt.Name = "ClientTxt";
             this.ClientTxt.ReadOnly = true;
             this.ClientTxt.Size = new System.Drawing.Size(284, 27);
@@ -309,7 +332,7 @@
             this.groupBox2.Size = new System.Drawing.Size(300, 475);
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "TIQUET ORIGINAL";
+            this.groupBox2.Text = "PRESENTACIÓ TIQUET";
             // 
             // TiquetPreviewTxt
             // 
@@ -398,5 +421,7 @@
         public System.Windows.Forms.Label EXPIRATIONLbl;
         private System.Windows.Forms.TextBox ExpirationTxt;
         private System.Windows.Forms.Label ERROR;
+        public System.Windows.Forms.Label ExistServerPosLbl;
+        private System.Windows.Forms.TextBox ExistServerPosTxt;
     }
 }
